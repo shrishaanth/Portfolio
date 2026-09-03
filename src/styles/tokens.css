@@ -1,0 +1,39 @@
+:root {
+  /* base */
+  --bg-base: #100e15;
+  --text: #ededf3;
+  --text-dim: rgba(237, 237, 243, 0.62);
+  --text-faint: rgba(237, 237, 243, 0.42);
+  --hairline: rgba(237, 237, 243, 0.1);
+
+  /* accent */
+  --amber: #fda136;
+  --amber-soft: #ffb870;
+  --amber-hover: #ffbb63;
+  --ember: 255, 120, 50; /* rgb triplet used inside rgba() for the glow */
+  --accent-grad: linear-gradient(135deg, #fda136 0%, #ff5e62 52%, #e0559c 100%);
+
+  /* type */
+  --font-display: "Unbounded", "Halvar Breitschrift CY", system-ui, sans-serif;
+  --font-body: "Manrope", "General Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* shape */
+  --radius-card: 26px;
+  --radius-pill: 999px;
+  --radius-field: 12px;
+
+  /* layout */
+  --maxw: 1680px;
+  --gutter: clamp(24px, 5vw, 88px);
+
+  /* spacing scale */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 24px;
+  --s-5: 40px;
+  --s-6: 64px;
+  --s-7: 96px;
+
+  color-scheme: dark;
+}
