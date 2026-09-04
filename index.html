@@ -1,4 +1,4 @@
-<title>Circuit Prototype</title>
+<title>Shrishaanth U</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap">
@@ -1122,12 +1122,13 @@
     <section id="about">
       <div class="hero">
         <div>
-          <span class="badge"><span class="badge__pulse"></span>OPEN &mdash; INTERNSHIPS 2026</span>
+          <span class="badge"><span class="badge__pulse"></span>OPEN &mdash; SUMMER 2026</span>
           <h1 class="hero__name">Shrishaanth&nbsp;U</h1>
           <div class="rule-glow"></div>
           <p class="hero__blurb">
-            Third-year computer science student at PSG College of Technology. I build
-            real-time infrastructure, graph forecasting models and quantitative pipelines.
+            Third-year CS student at PSG College of Technology. I work on real-time
+            systems, applied ML and quantitative pipelines &mdash; usually by building
+            something end to end and then trying to break it.
           </p>
           <div class="actions">
             <a class="btn btn--primary" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer" data-resume>VIEW R&Eacute;SUM&Eacute;</a>
@@ -1158,12 +1159,12 @@
             I&rsquo;m drawn to systems where correctness is hard to fake &mdash; a board
             where tenant isolation is enforced by the database on every request, a demand
             forecast that has to beat a linear baseline, a backtest that isn&rsquo;t allowed
-            to see the future. The interesting work is usually in the part that resists
+            to see the future. The interesting part is usually the part that resists
             shortcuts.
           </p>
           <p>
-            Right now I&rsquo;m looking for a summer 2026 internship &mdash; SDE, backend
-            systems, or applied ML &mdash; where the constraints are the interesting part.
+            Right now I&rsquo;m looking for a summer 2026 internship in SDE, backend
+            systems, or applied ML.
           </p>
         </div>
 
@@ -1174,7 +1175,7 @@
           </div>
           <div class="focus__item">
             <span class="focus__k">APPLIED ML</span>
-            <span class="focus__v">PyTorch and the scientific-Python stack. Graph networks, sequence models, honest evaluation.</span>
+            <span class="focus__v">PyTorch and the scientific-Python stack. Graph networks, sequence models, and evaluation that doesn&rsquo;t cheat.</span>
           </div>
           <div class="focus__item">
             <span class="focus__k">SYSTEMS &amp; QUANT</span>
@@ -1209,7 +1210,7 @@
           <span class="index__no">02</span>
           <span>
             <span class="index__name">SurgeMap</span>
-            <span class="index__cat" style="display:block">MACHINE-LEARNING</span>
+            <span class="index__cat" style="display:block">APPLIED ML</span>
           </span>
         </a>
         <a class="index__item" data-target="p3" href="#p3">
@@ -1236,10 +1237,10 @@
             </p>
             <p class="project__context">
               Built to learn multi-tenancy the hard way. The Kanban board is the easy part; the
-              real work was making tenant isolation something the database guarantees on every
-              query, not something the application layer has to remember to check. Auth followed
-              from the same idea &mdash; short-lived access tokens, refresh tokens that rotate
-              on use and can be revoked server-side.
+              real work was pushing tenant isolation down to the database, so a query physically
+              can&rsquo;t return another tenant&rsquo;s rows. Auth followed the same instinct
+              &mdash; short-lived access tokens, refresh tokens that rotate on use and can be
+              revoked server-side.
             </p>
             <blockquote class="project__pull">
               &ldquo;Isolation the database enforces, not something the app remembers to check.&rdquo;
@@ -1303,7 +1304,6 @@
             </div>
             <div class="links">
               <a href="https://github.com/shrishaanth/Taskify.io" target="_blank" rel="noreferrer">SOURCE &rarr;</a>
-              <a class="muted" href="#p1">LIVE_DEMO &rarr;</a>
             </div>
           </div>
         </article>
@@ -1320,10 +1320,10 @@
             </p>
             <p class="project__context">
               A test of whether graph structure actually helps short-horizon forecasting. It does,
-              and the gap over the linear baseline is widest at the 60-minute horizon &mdash; the
-              point where any one zone&rsquo;s own recent history tells you the least and its
-              neighbours tell you the most. The convolution is custom so the message-passing
-              matches the direction of the TLC trip graph.
+              and the gap over the linear baseline is widest at 60&nbsp;minutes out &mdash; far
+              enough ahead that a zone&rsquo;s own recent trips stop being predictive on their own.
+              The convolution is custom, so message-passing follows the direction of the TLC trip
+              graph.
             </p>
             <blockquote class="project__pull">
               &ldquo;Neighbours matter most exactly where a zone&rsquo;s own history matters least.&rdquo;
@@ -1572,14 +1572,14 @@
     <section id="contact" class="pane">
       <div class="sec-head reveal reveal--sm">
         <span class="sec-head__label">CONTACT</span>
-        <span class="sec-head__count">USUALLY REPLIES IN A DAY OR TWO</span>
+        <span class="sec-head__count">EMAIL IS FASTEST</span>
       </div>
 
       <p class="contact__intro reveal">
-        Open to SDE, backend-systems and applied-ML internships for summer 2026. I like
-        problems where the constraints are the interesting part &mdash; real-time systems,
-        forecasting, anything with a correctness bar. If that&rsquo;s the kind of work you
-        have, get in touch.
+        Open to SDE, backend-systems and applied-ML internships for summer 2026. If
+        you&rsquo;ve got a problem that&rsquo;s harder than it looks &mdash; real-time,
+        forecasting, anything with a strict correctness bar &mdash; I&rsquo;d like to hear
+        about it.
       </p>
 
       <div class="contact__grid">
@@ -1643,9 +1643,8 @@
               <span class="dot"></span> AVAILABLE
             </div>
             <p>
-              Third-year CS student, open to summer 2026 internships in SDE, backend
-              systems and applied ML. Owns a problem end to end; occasionally gets it
-              right on the first try.
+              Comfortable owning something from spec to deploy. Writes tests he&rsquo;d
+              want to inherit. Occasionally gets it right on the first try.
             </p>
             <div class="contact__ping">$ ping shrishaanth &#183; 200 OK &#183; p50 ~12h, p99 ~48h (exam weeks excluded)</div>
           </div>
