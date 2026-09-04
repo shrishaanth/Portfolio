@@ -347,6 +347,68 @@
   .facts span:first-child { color: var(--faint); }
   .facts a:hover span:last-child { color: var(--accent-soft); }
 
+  /* ---------- about body ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .about__body {
+    margin-top: clamp(48px, 7vw, 76px);
+    display: grid;
+    grid-template-columns: minmax(0, 62ch) 1fr;
+    gap: clamp(32px, 6vw, 72px);
+    align-items: start;
+  }
+
+  .prose p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+
+  .prose p + p { margin-top: 14px; }
+  .prose .eyebrow { display: block; margin-bottom: 16px; }
+
+  .focus { border-top: 1px solid var(--line-accent); }
+
+  .focus__item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .focus__item:last-child { border-bottom: 0; }
+
+  .focus__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .focus__v {
+    display: block;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+
+  .about__now {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding: 14px 16px;
+    border: 1px solid var(--line-accent);
+    background: rgba(61, 123, 255, 0.05);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--accent-soft);
+  }
+
   /* ---------- section head ---------- */
   .sec-head {
     display: flex;
@@ -497,6 +559,59 @@
     margin-top: 13px;
   }
 
+  .project__context {
+    font-size: 14px;
+    line-height: 1.68;
+    color: var(--muted);
+    max-width: 640px;
+    margin-top: 14px;
+  }
+
+  .project__pull {
+    max-width: 640px;
+    margin: 22px 0 0;
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+    font-size: clamp(16px, 2.2vw, 19px);
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .project__diagram {
+    margin: 24px 0 0;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .project__diagram svg {
+    display: block;
+    width: 100%;
+    min-width: 560px;   /* scroll rather than shrink labels below legibility */
+    height: auto;
+  }
+
+  .project__diagram figcaption {
+    padding: 9px 14px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .dgm-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    fill: var(--muted);
+  }
+
+  .dgm-label--dim { fill: var(--dim); }
+  .dgm-label--accent { fill: var(--accent-soft); }
+
   .points {
     margin-top: 24px;
     max-width: 640px;
@@ -623,6 +738,25 @@
 
   .dl-link:hover { color: var(--accent-soft); }
 
+  .pane__note {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    max-width: 66ch;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .pane__note b {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-right: 10px;
+  }
+
   /* ---------- footer ---------- */
   .foot {
     margin-top: clamp(72px, 10vw, 110px);
@@ -669,6 +803,7 @@
   @media (max-width: 880px) {
     .hero { grid-template-columns: 1fr; gap: 36px; }
     .hero__aside { max-width: 190px; }
+    .about__body { grid-template-columns: 1fr; gap: 32px; }
     .pane__grid { grid-template-columns: 1fr; }
     .work { grid-template-columns: 1fr; gap: 28px; }
     .index { position: static; display: flex; gap: 8px; overflow-x: auto; }
@@ -708,28 +843,72 @@
 
   <main class="wrap">
 
-    <section class="hero" id="about">
-      <div>
-        <span class="badge"><span class="badge__pulse"></span>OPEN &mdash; INTERNSHIPS 2026</span>
-        <h1 class="hero__name">Shrishaanth&nbsp;U</h1>
-        <div class="rule-glow"></div>
-        <p class="hero__blurb">
-          Computer science student at PSG College of Technology. I build real-time
-          infrastructure, graph forecasting models and quantitative pipelines.
-        </p>
-        <div class="actions">
-          <a class="btn btn--primary" href="#resume">RESUME.PDF</a>
-          <a class="btn btn--ghost" href="#projects">PROJECTS</a>
+    <section id="about">
+      <div class="hero">
+        <div>
+          <span class="badge"><span class="badge__pulse"></span>OPEN &mdash; INTERNSHIPS 2026</span>
+          <h1 class="hero__name">Shrishaanth&nbsp;U</h1>
+          <div class="rule-glow"></div>
+          <p class="hero__blurb">
+            Computer science student at PSG College of Technology. I build real-time
+            infrastructure, graph forecasting models and quantitative pipelines.
+          </p>
+          <div class="actions">
+            <a class="btn btn--primary" href="#resume">RESUME.PDF</a>
+            <a class="btn btn--ghost" href="#projects">PROJECTS</a>
+          </div>
+        </div>
+
+        <div class="hero__aside">
+          <div class="portrait">PORTRAIT</div>
+          <div class="facts">
+            <div><span>CGPA</span><span style="color:var(--accent)">9.18</span></div>
+            <div><span>LOC</span><span>COIMBATORE</span></div>
+            <a href="https://github.com/shrishaanth" target="_blank" rel="noreferrer"><span>GH</span><span>/shrishaanth</span></a>
+            <a href="https://www.linkedin.com/in/shrishaanth-dev" target="_blank" rel="noreferrer"><span>LI</span><span>/dev</span></a>
+          </div>
         </div>
       </div>
 
-      <div class="hero__aside">
-        <div class="portrait">PORTRAIT</div>
-        <div class="facts">
-          <div><span>CGPA</span><span style="color:var(--accent)">9.18</span></div>
-          <div><span>LOC</span><span>COIMBATORE</span></div>
-          <a href="https://github.com/shrishaanth" target="_blank" rel="noreferrer"><span>GH</span><span>/shrishaanth</span></a>
-          <a href="https://www.linkedin.com/in/shrishaanth-dev" target="_blank" rel="noreferrer"><span>LI</span><span>/dev</span></a>
+      <div class="about__body reveal">
+        <div class="prose">
+          <span class="eyebrow">ABOUT</span>
+          <p>
+            I&rsquo;m four years into an integrated M.Sc. in Software Systems at
+            PSG&nbsp;College of Technology, in Coimbatore. Most of what I know I&rsquo;ve
+            picked up by building things end to end and then trying to break them.
+          </p>
+          <p>
+            I&rsquo;m drawn to systems where correctness is hard to fake &mdash; a board
+            where tenant isolation is enforced by the database on every request, a demand
+            forecast that has to beat a linear baseline, a backtest that isn&rsquo;t allowed
+            to see the future. The interesting work is usually in the part that resists
+            shortcuts.
+          </p>
+          <p>
+            Away from the screen I sketch in pencil and shoot photographs &mdash; both
+            mostly an excuse to look more carefully at light and proportion.
+          </p>
+        </div>
+
+        <div class="focus">
+          <div class="focus__item">
+            <span class="focus__k">FULL-STACK</span>
+            <span class="focus__v">TypeScript, React, Node. Auth, real-time sync, and data models that hold up under multi-tenancy.</span>
+          </div>
+          <div class="focus__item">
+            <span class="focus__k">APPLIED ML</span>
+            <span class="focus__v">PyTorch and the scientific-Python stack. Graph networks, sequence models, honest evaluation.</span>
+          </div>
+          <div class="focus__item">
+            <span class="focus__k">SYSTEMS &amp; QUANT</span>
+            <span class="focus__v">C++ and Python for the performance-sensitive parts. Point-in-time data, walk-forward testing, no leakage.</span>
+          </div>
+        </div>
+
+        <div class="about__now">
+          &rsaquo; Currently &mdash; coursework, and looking for a summer 2026 internship in
+          infrastructure or applied ML.
         </div>
       </div>
     </section>
@@ -781,6 +960,65 @@
               Multi-tenant Kanban where every board edit syncs live across clients, with tenant
               isolation enforced at the database on every request.
             </p>
+            <p class="project__context">
+              Built to learn multi-tenancy the hard way. The Kanban board is the easy part; the
+              real work was making tenant isolation something the database guarantees on every
+              query, not something the application layer has to remember to check. Auth followed
+              from the same idea &mdash; short-lived access tokens, refresh tokens that rotate
+              on use and can be revoked server-side.
+            </p>
+            <blockquote class="project__pull">
+              &ldquo;Isolation the database enforces, not something the app remembers to check.&rdquo;
+            </blockquote>
+
+            <figure class="project__diagram">
+              <svg viewBox="0 0 660 262" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="Clients sync through a tenant-scoped Socket.IO room to the API, which reaches the database only past a per-request isolation check. Access tokens are short-lived; refresh tokens rotate and can be revoked.">
+                <defs>
+                  <marker id="t-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill="var(--faint)"/>
+                  </marker>
+                </defs>
+
+                <rect x="16" y="46" width="94" height="32" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="63" y="66" text-anchor="middle" class="dgm-label">CLIENT A</text>
+                <rect x="16" y="98" width="94" height="32" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="63" y="118" text-anchor="middle" class="dgm-label">CLIENT B</text>
+
+                <path d="M114 62 L166 80" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)" marker-start="url(#t-ah)"/>
+                <path d="M114 114 L166 100" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)" marker-start="url(#t-ah)"/>
+                <text x="140" y="38" text-anchor="middle" class="dgm-label dgm-label--dim">optimistic move &#183; server reconcile</text>
+
+                <rect x="170" y="54" width="150" height="64" fill="var(--panel)" stroke="var(--accent)"/>
+                <text x="245" y="82" text-anchor="middle" class="dgm-label dgm-label--accent">SOCKET.IO ROOM</text>
+                <text x="245" y="99" text-anchor="middle" class="dgm-label dgm-label--dim">one per tenant</text>
+
+                <path d="M322 86 L374 86" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)"/>
+
+                <rect x="378" y="60" width="86" height="52" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="421" y="90" text-anchor="middle" class="dgm-label">API</text>
+
+                <path d="M466 86 L502 86" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)"/>
+                <line x1="500" y1="42" x2="500" y2="132" stroke="var(--accent)" stroke-width="2"/>
+                <text x="500" y="150" text-anchor="middle" class="dgm-label dgm-label--accent">isolation check &#183; every request</text>
+
+                <rect x="522" y="54" width="122" height="64" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="583" y="82" text-anchor="middle" class="dgm-label">DATABASE</text>
+                <text x="583" y="99" text-anchor="middle" class="dgm-label dgm-label--dim">tenant id on every row</text>
+
+                <line x1="16" y1="192" x2="644" y2="192" stroke="var(--line)"/>
+                <text x="16" y="212" class="dgm-label dgm-label--accent">AUTH</text>
+                <rect x="66" y="198" width="158" height="30" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="145" y="217" text-anchor="middle" class="dgm-label">access &#183; short-lived</text>
+                <path d="M226 213 L268 213" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)"/>
+                <rect x="270" y="198" width="204" height="30" fill="var(--panel)" stroke="var(--accent)"/>
+                <text x="372" y="217" text-anchor="middle" class="dgm-label dgm-label--accent">refresh &#183; rotates, revocable</text>
+                <path d="M474 222 C 520 244, 230 244, 146 230" stroke="var(--faint)" fill="none" marker-end="url(#t-ah)"/>
+                <text x="310" y="254" text-anchor="middle" class="dgm-label dgm-label--dim">new pair on every use</text>
+              </svg>
+              <figcaption>FIG.01 &mdash; SYNC + ISOLATION + TOKEN ROTATION</figcaption>
+            </figure>
+
             <div class="points">
               <div><b>01</b><p>Two-layer RBAC, re-checked on every request rather than cached at login.</p></div>
               <div><b>02</b><p>Room-scoped Socket.IO events with optimistic, server-reconciled moves.</p></div>
@@ -807,6 +1045,85 @@
               Graph neural network forecasting taxi demand across 253 NYC zones &mdash; cuts RMSE by
               3&ndash;10% against ridge regression, with the largest gains at the longest horizons.
             </p>
+            <p class="project__context">
+              A test of whether graph structure actually helps short-horizon forecasting. It does,
+              and the gap over the linear baseline is widest at the 60-minute horizon &mdash; the
+              point where any one zone&rsquo;s own recent history tells you the least and its
+              neighbours tell you the most. The convolution is custom so the message-passing
+              matches the direction of the TLC trip graph.
+            </p>
+            <blockquote class="project__pull">
+              &ldquo;Neighbours matter most exactly where a zone&rsquo;s own history matters least.&rdquo;
+            </blockquote>
+
+            <figure class="project__diagram">
+              <svg viewBox="0 0 660 264" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="A directed zone graph feeds a custom graph convolution and a GRU that reads four hours of history, emitting demand forecasts at 5, 15, 30 and 60 minutes. The RMSE gain over ridge regression widens with the horizon.">
+                <defs>
+                  <marker id="s-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill="var(--faint)"/>
+                  </marker>
+                </defs>
+
+                <text x="20" y="26" class="dgm-label dgm-label--dim">253-ZONE TLC DIRECTED GRAPH &#183; abstracted</text>
+
+                <!-- directed zone graph -->
+                <g stroke="var(--faint)" fill="none" marker-end="url(#s-ah)">
+                  <path d="M52 74 L120 52"/>
+                  <path d="M120 52 L176 92"/>
+                  <path d="M52 74 L96 132"/>
+                  <path d="M96 132 L176 92"/>
+                  <path d="M176 92 L150 168"/>
+                  <path d="M96 132 L150 168"/>
+                  <path d="M150 168 L70 186"/>
+                  <path d="M70 186 L52 74"/>
+                </g>
+                <g stroke="var(--accent)" fill="none" marker-end="url(#s-ah)">
+                  <path d="M120 52 L96 132"/>
+                  <path d="M176 92 L96 132"/>
+                </g>
+                <g fill="var(--bg)" stroke="var(--dim)">
+                  <circle cx="52" cy="74" r="6"/>
+                  <circle cx="120" cy="52" r="6"/>
+                  <circle cx="176" cy="92" r="6"/>
+                  <circle cx="150" cy="168" r="6"/>
+                  <circle cx="70" cy="186" r="6"/>
+                </g>
+                <circle cx="96" cy="132" r="7" fill="var(--accent)" stroke="none"/>
+                <text x="112" y="136" class="dgm-label dgm-label--accent">zone i</text>
+
+                <path d="M210 120 L246 120" stroke="var(--faint)" fill="none" marker-end="url(#s-ah)"/>
+
+                <rect x="248" y="86" width="128" height="34" fill="var(--panel)" stroke="var(--accent)"/>
+                <text x="312" y="107" text-anchor="middle" class="dgm-label dgm-label--accent">GRAPH CONV</text>
+                <path d="M312 120 L312 140" stroke="var(--faint)" fill="none" marker-end="url(#s-ah)"/>
+                <rect x="248" y="142" width="128" height="34" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="312" y="163" text-anchor="middle" class="dgm-label">GRU &#183; reads 4h</text>
+
+                <path d="M378 130 L408 130" stroke="var(--faint)" fill="none" marker-end="url(#s-ah)"/>
+
+                <!-- horizons -->
+                <rect x="410" y="60"  width="86" height="26" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="453" y="77"  text-anchor="middle" class="dgm-label">05 MIN</text>
+                <rect x="410" y="92"  width="86" height="26" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="453" y="109" text-anchor="middle" class="dgm-label">15 MIN</text>
+                <rect x="410" y="124" width="86" height="26" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="453" y="141" text-anchor="middle" class="dgm-label">30 MIN</text>
+                <rect x="410" y="156" width="86" height="26" fill="var(--panel)" stroke="var(--accent)"/>
+                <text x="453" y="173" text-anchor="middle" class="dgm-label dgm-label--accent">60 MIN</text>
+
+                <!-- rmse gain bars -->
+                <line x1="524" y1="188" x2="636" y2="188" stroke="var(--line-accent)"/>
+                <rect x="528" y="170" width="16" height="18" fill="var(--dim)"/>
+                <rect x="556" y="158" width="16" height="30" fill="var(--faint)"/>
+                <rect x="584" y="144" width="16" height="44" fill="var(--muted)"/>
+                <rect x="612" y="126" width="16" height="62" fill="var(--accent)"/>
+                <text x="524" y="208" class="dgm-label dgm-label--dim">RMSE gain vs. ridge</text>
+                <text x="524" y="222" class="dgm-label dgm-label--dim">3&#8211;10%, widening with horizon</text>
+              </svg>
+              <figcaption>FIG.02 &mdash; GRAPH &rarr; CONV &rarr; GRU &rarr; PER-ZONE HORIZONS</figcaption>
+            </figure>
+
             <div class="points">
               <div><b>01</b><p>Graph engine over a 253-zone NYC TLC directed graph with a custom graph convolution.</p></div>
               <div><b>02</b><p>A GRU reads 4-hour spatial history to emit 5 / 15 / 30 / 60-minute forecasts per zone.</p></div>
@@ -832,6 +1149,63 @@
               Point-in-time quantitative pipeline with walk-forward backtesting and zero
               future-data leakage &mdash; the failure mode that invalidates most student quant work.
             </p>
+            <p class="project__context">
+              Most student quant projects look good because they quietly use data from the future.
+              This one is built around not doing that: every input is as-of its own timestamp,
+              risk is estimated with an EWMA that only ever looks back, and the backtest walks
+              forward one step at a time. The allocator is Hierarchical Risk Parity; the Streamlit
+              dashboard exists so the results can be checked against plain baselines.
+            </p>
+            <blockquote class="project__pull">
+              &ldquo;If the backtest is allowed to see the future, the numbers mean nothing.&rdquo;
+            </blockquote>
+
+            <figure class="project__diagram">
+              <svg viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="A time axis with an as-of marker: only data to its left is used. An EWMA lookback window feeds a Hierarchical Risk Parity allocator, and the whole window walks forward one step at a time, never seeing the future.">
+                <defs>
+                  <marker id="y-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill="var(--faint)"/>
+                  </marker>
+                  <pattern id="y-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="7" stroke="var(--line-accent)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+
+                <!-- time axis -->
+                <rect x="118" y="46" width="302" height="26" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <rect x="420" y="46" width="222" height="26" fill="url(#y-hatch)" stroke="var(--line)"/>
+                <line x1="20" y1="72" x2="642" y2="72" stroke="var(--line-accent)"/>
+                <line x1="420" y1="34" x2="420" y2="118" stroke="var(--accent)" stroke-width="2"/>
+                <text x="420" y="28" text-anchor="middle" class="dgm-label dgm-label--accent">as-of t</text>
+                <text x="128" y="63" class="dgm-label">used &#183; as-of each timestamp</text>
+                <text x="432" y="63" class="dgm-label dgm-label--dim">future &mdash; masked</text>
+
+                <!-- lookback bracket -->
+                <path d="M118 84 L118 92 L418 92 L418 84" fill="none" stroke="var(--faint)"/>
+                <text x="268" y="107" text-anchor="middle" class="dgm-label dgm-label--dim">EWMA lookback &#183; backward only</text>
+
+                <!-- pipeline -->
+                <path d="M268 112 L268 130" stroke="var(--faint)" fill="none" marker-end="url(#y-ah)"/>
+                <rect x="150" y="132" width="150" height="30" fill="var(--panel)" stroke="var(--accent)"/>
+                <text x="225" y="151" text-anchor="middle" class="dgm-label dgm-label--accent">HRP ALLOCATOR</text>
+                <path d="M300 147 L340 147" stroke="var(--faint)" fill="none" marker-end="url(#y-ah)"/>
+                <rect x="342" y="132" width="110" height="30" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <text x="397" y="151" text-anchor="middle" class="dgm-label">positions</text>
+
+                <!-- walk forward -->
+                <line x1="20" y1="196" x2="642" y2="196" stroke="var(--line)"/>
+                <text x="20" y="216" class="dgm-label dgm-label--accent">WALK FORWARD</text>
+                <rect x="150" y="204" width="150" height="16" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <rect x="230" y="224" width="150" height="16" fill="var(--panel)" stroke="var(--line-accent)"/>
+                <rect x="310" y="244" width="150" height="4" fill="var(--panel)" stroke="var(--accent)"/>
+                <path d="M304 212 L226 232" stroke="var(--faint)" fill="none" marker-end="url(#y-ah)"/>
+                <path d="M384 232 L306 246" stroke="var(--faint)" fill="none" marker-end="url(#y-ah)"/>
+                <text x="470" y="230" class="dgm-label dgm-label--dim">one step at a time</text>
+              </svg>
+              <figcaption>FIG.03 &mdash; POINT-IN-TIME DATA &rarr; HRP &rarr; WALK-FORWARD</figcaption>
+            </figure>
+
             <div class="points">
               <div><b>01</b><p>Estimates time-varying risk via EWMA on a strict point-in-time basis.</p></div>
               <div><b>02</b><p>Allocates capital through a Hierarchical Risk Parity engine.</p></div>
@@ -887,6 +1261,11 @@
           </div>
         </div>
       </div>
+      <p class="pane__note reveal">
+        <b>BEYOND CODE</b>Freehand pencil sketching &mdash; studying light, shadow and
+        proportion in everyday objects &mdash; and casual photography, mostly composition
+        and available light on the walk home.
+      </p>
     </section>
 
     <section id="contact" class="pane">
