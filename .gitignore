@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# deploy
+.vercel
+.netlify
+
+# résumé is hosted off-repo — never commit it here
+Shrishaanth-U-Resume.pdf

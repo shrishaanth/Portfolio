@@ -1338,7 +1338,7 @@
             something end to end and then trying to break it.
           </p>
           <div class="actions">
-            <a class="btn btn--primary" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer" data-resume>VIEW R&Eacute;SUM&Eacute;</a>
+            <a class="btn btn--primary" href="#" target="_blank" rel="noreferrer" data-resume>VIEW R&Eacute;SUM&Eacute;</a>
             <a class="btn btn--ghost" href="#projects">PROJECTS</a>
           </div>
         </div>
@@ -1717,7 +1717,7 @@
     <section id="resume" class="pane">
       <div class="sec-head reveal reveal--sm">
         <span class="sec-head__label">RESUME</span>
-        <a class="btn-sm" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer" data-resume>
+        <a class="btn-sm" href="#" target="_blank" rel="noreferrer" data-resume>
           VIEW R&Eacute;SUM&Eacute;
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
         </a>
@@ -2180,12 +2180,20 @@
       document.title = document.hidden ? '[ process suspended ] ' + realTitle : realTitle;
     });
 
-    /* ---- 8. résumé: open in a new tab, fall back to inline ---- *
-     * The PDF is a separate file, fetched only when someone asks
-     * for it — never shipped in this page's source.               */
-    var RESUME_HREF = './Shrishaanth-U-Resume.pdf';
+    /* ===========================================================
+     *  RÉSUMÉ LINK — set this to your hosted PDF (Google Drive
+     *  "anyone with the link", Dropbox, your own domain, …).
+     *  The résumé is deliberately NOT in this repo.
+     * =========================================================== */
+    var RESUME_HREF = 'https://REPLACE-WITH-YOUR-RESUME-URL';
+
     var viewer = document.getElementById('resume-viewer');
     var viewerClose = document.getElementById('resume-viewer-close');
+
+    // point every "view résumé" control at the hosted URL
+    Array.prototype.forEach.call(document.querySelectorAll('[data-resume]'), function (a) {
+      a.setAttribute('href', RESUME_HREF);
+    });
 
     function showInline() {
       if (!viewer) return;
@@ -2206,7 +2214,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-resume]'), function (a) {
       a.addEventListener('click', function (e) {
         e.preventDefault();
-        var win = window.open(a.getAttribute('href') || RESUME_HREF, '_blank', 'noopener');
+        var win = window.open(RESUME_HREF, '_blank', 'noopener');
         if (!win || win.closed || typeof win.closed === 'undefined') {
           showInline();           // popup blocked → render it on the page instead
         }
