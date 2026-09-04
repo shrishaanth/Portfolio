@@ -4,6 +4,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# local Claude Code dev-preview config — not part of the app
+.claude/
+
 # node / vite
 node_modules/
 dist/
