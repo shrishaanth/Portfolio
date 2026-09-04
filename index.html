@@ -1037,6 +1037,12 @@
   }
 </style>
 
+<!--
+  you view-sourced a portfolio. that's either due diligence or a slow afternoon.
+  either way we should probably talk: shrishaanth2024@gmail.com
+  ( yes, this whole thing is hand-written. no, there is no build step. )
+-->
+
 <div class="bg" id="bg" aria-hidden="true">
   <div class="bg__ambient"></div>
   <div class="bg__base"></div>
@@ -1126,7 +1132,7 @@
         </div>
 
         <div class="about__now">
-          &rsaquo; status &mdash; third year &#183; coursework &#183; open to summer 2026 internships &#183; India, remote-friendly
+          &rsaquo; status &mdash; third year &#183; coursework &#183; open to summer 2026 internships &#183; India, remote-friendly &#183; caffeine: nominal
         </div>
       </div>
     </section>
@@ -1580,9 +1586,10 @@
             </div>
             <p>
               Third-year CS student, open to summer 2026 internships in SDE, backend
-              systems and applied ML. Comfortable owning a problem end to end.
+              systems and applied ML. Owns a problem end to end; occasionally gets it
+              right on the first try.
             </p>
-            <div class="contact__ping">$ ping shrishaanth &nbsp;&mdash;&nbsp; reply usually within a day or two</div>
+            <div class="contact__ping">$ ping shrishaanth &#183; 200 OK &#183; p50 ~12h, p99 ~48h (exam weeks excluded)</div>
           </div>
         </div>
 
@@ -1610,7 +1617,7 @@
 
     <footer class="foot">
       <span>&copy; 2026 SHRISHAANTH_U</span>
-      <span>HAND-BUILT &#183; HTML / CSS / JS</span>
+      <span>0 DEPENDENCIES &#183; EVERY DIV PLACED BY HAND</span>
     </footer>
 
   </main>
@@ -1619,6 +1626,22 @@
 <script>
   (function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- 0. console easter egg --------------------------------- */
+    try {
+      var mono = 'font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.7;';
+      console.log('%c$ whoami', mono + 'color:#3D7BFF;font-weight:700');
+      console.log(
+        '%cshrishaanth — third-year cs student. you opened the console.\n' +
+        'that is a very good sign or a very bad meeting.\n\n' +
+        'stack:      the one in the resume, minus the ones i only used once\n' +
+        'uptime:     since ~2021, minor outages during exams\n' +
+        'looking for: a summer 2026 internship where the constraints are the fun part\n' +
+        'reach me:   shrishaanth2024@gmail.com',
+        mono + 'color:#8FB4FF'
+      );
+      console.log('%c// no analytics on this page. the only person tracking you is me, right now, in this log.', mono + 'color:#4A4A60');
+    } catch (e) { /* console-less environment, carry on */ }
 
     /* ---- 1. cursor-revealed grid -------------------------------- */
     var bg = document.getElementById('bg');
@@ -1848,5 +1871,11 @@
         window.location.href = 'mailto:shrishaanth2024@gmail.com?subject=' + subject + '&body=' + body;
       });
     }
+
+    /* ---- 7. tab title when you wander off --------------------- */
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? '[ process suspended ] ' + realTitle : realTitle;
+    });
   })();
 </script>
