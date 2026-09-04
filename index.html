@@ -788,22 +788,11 @@
 
   .resume-viewer__close:hover { color: var(--accent-soft); }
 
-  .resume-viewer {
-    max-height: min(85vh, 1100px);
-    overflow: auto;
-  }
-
-  .resume-viewer__bar {
-    position: sticky;
-    top: 0;
-    background: #1c1c1c;
-    z-index: 1;
-  }
-
-  .resume-viewer img {
+  .resume-viewer iframe {
     display: block;
     width: 100%;
-    height: auto;
+    height: min(82vh, 1000px);
+    border: 0;
     background: #fff;
   }
 
@@ -1929,9 +1918,6 @@
   </main>
 </div>
 
-
-
-
 <script>
   (function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2194,43 +2180,23 @@
       document.title = document.hidden ? '[ process suspended ] ' + realTitle : realTitle;
     });
 
-    /* ---- 8. résumé: open in a new tab, or show it inline ------ *
-     * The PDF is embedded as base64 so this works even in a
-     * sandboxed single-file context. On a real deploy the plain
-     * ./Shrishaanth-U-Resume.pdf href is the graceful fallback.   */
-    var resumeUrl = null;
-    var b64 = document.getElementById('resume-b64');
-    if (b64 && b64.textContent && b64.textContent.indexOf('__RESUME') !== 0) {
-      try {
-        var raw = atob(b64.textContent.trim());
-        var bytes = new Uint8Array(raw.length);
-        for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-        resumeUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-      } catch (e) { /* fall back to the href */ }
-    }
-
+    /* ---- 8. résumé: open in a new tab, fall back to inline ---- *
+     * The PDF is a separate file, fetched only when someone asks
+     * for it — never shipped in this page's source.               */
+    var RESUME_HREF = './Shrishaanth-U-Resume.pdf';
     var viewer = document.getElementById('resume-viewer');
     var viewerClose = document.getElementById('resume-viewer-close');
-    var pngEl = document.getElementById('resume-png');
-    var resumePages = (pngEl && pngEl.textContent.trim().indexOf('data:image') === 0)
-      ? pngEl.textContent.trim().split(/\s+/)
-      : [];
 
-    // sandboxed frames refuse to render a PDF, so the inline view is
-    // page images rendered from the same PDF at build time.
     function showInline() {
-      if (!viewer) return false;
-      if (!viewer.querySelector('img') && resumePages.length) {
-        resumePages.forEach(function (uri, k) {
-          var img = document.createElement('img');
-          img.alt = 'Résumé — Shrishaanth U, page ' + (k + 1);
-          img.src = uri;
-          viewer.appendChild(img);
-        });
+      if (!viewer) return;
+      if (!viewer.querySelector('iframe')) {
+        var f = document.createElement('iframe');
+        f.title = 'Résumé — Shrishaanth U';
+        f.src = RESUME_HREF;
+        viewer.appendChild(f);
       }
       viewer.hidden = false;
       viewer.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-      return true;
     }
 
     if (viewerClose && viewer) {
@@ -2239,9 +2205,8 @@
 
     Array.prototype.forEach.call(document.querySelectorAll('[data-resume]'), function (a) {
       a.addEventListener('click', function (e) {
-        var url = resumeUrl || a.getAttribute('href');
         e.preventDefault();
-        var win = window.open(url, '_blank', 'noopener');
+        var win = window.open(a.getAttribute('href') || RESUME_HREF, '_blank', 'noopener');
         if (!win || win.closed || typeof win.closed === 'undefined') {
           showInline();           // popup blocked → render it on the page instead
         }

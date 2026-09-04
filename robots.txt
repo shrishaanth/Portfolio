@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# keep the résumé out of search results — the site still links to it
+Disallow: /Shrishaanth-U-Resume.pdf
