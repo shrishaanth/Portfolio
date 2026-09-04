@@ -1086,6 +1086,191 @@
     * { transition: none !important; animation: none !important; }
     .bg__reveal, .bg__glow { display: none; }
   }
+
+  /* ================================================================ *
+   *  Extras: custom cursor, click ripple, systems panel, latency
+   *  chart, diagram flow, the Syntropy gag
+   * ================================================================ */
+
+  /* --- custom cursor (fine pointers only) --- */
+  @media (hover: hover) and (pointer: fine) {
+    body,
+    a, button, input, textarea, select, summary, label,
+    [role="button"], .index__item, .contact__card { cursor: none; }
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform;
+    transition: opacity 0.25s ease;
+  }
+
+  .cursor-ready .cursor-dot,
+  .cursor-ready .cursor-ring { opacity: 1; }
+
+  .cursor-dot {
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    background: var(--accent);
+    box-shadow: 0 0 8px 1px rgba(61, 123, 255, 0.9);
+  }
+
+  .cursor-ring {
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+    border: 1px solid rgba(61, 123, 255, 0.55);
+    transition: width 0.18s ease, height 0.18s ease, margin 0.18s ease,
+                border-color 0.18s ease, opacity 0.25s ease;
+  }
+
+  .cursor-ring.is-hot {
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border-color: rgba(61, 123, 255, 0.95);
+  }
+
+  .cursor-ring.is-down {
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+  }
+
+  .cursor-ring.is-text {
+    width: 3px;
+    height: 22px;
+    margin: -11px 0 0 -1.5px;
+    border-color: var(--accent-soft);
+  }
+
+  /* --- click ripple through the grid --- */
+  .bg__ripple {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    border: 1px solid rgba(61, 123, 255, 0.6);
+    animation: ripple 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes ripple {
+    from { transform: translate(-50%, -50%) scale(0.1); opacity: 0.8; }
+    to   { transform: translate(-50%, -50%) scale(9);   opacity: 0; }
+  }
+
+  /* --- terminal --status line + systems panel --- */
+  .term { margin-top: 26px; max-width: 560px; }
+
+  .term__cmd {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent-soft);
+  }
+
+  .term__caret {
+    display: inline-block;
+    width: 7px;
+    height: 1em;
+    margin-left: 2px;
+    background: var(--accent);
+    vertical-align: -0.15em;
+    animation: caret-blink 1.05s step-end infinite;
+  }
+
+  .sys {
+    margin-top: 12px;
+    border: 1px solid var(--line-accent);
+    background: rgba(61, 123, 255, 0.04);
+  }
+
+  .sys__row {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    gap: 12px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  .sys__row:last-child { border-bottom: 0; }
+  .sys__row > span:first-child { color: var(--faint); letter-spacing: 0.06em; }
+  .sys__row > span:last-child { color: var(--ink-2); }
+  .sys__row b { color: var(--accent-soft); font-weight: 500; }
+  .sys__row .ok { color: #8CE0A8; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .js-motion .sys { opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .js-motion .sys.is-in { opacity: 1; transform: none; }
+  }
+
+  /* --- reply-latency histogram --- */
+  .latency {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(95, 217, 138, 0.2);
+  }
+
+  .latency svg { display: block; width: 100%; max-width: 300px; height: auto; }
+
+  .latency figcaption {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--dim);
+    margin-top: 6px;
+  }
+
+  .latency .bar { fill: var(--faint); }
+  .latency .tick { stroke: var(--accent); stroke-width: 1; }
+  .latency .tick--p99 { stroke: #E0904F; }
+  .latency .tlabel { font-family: var(--mono); font-size: 9px; fill: var(--muted); }
+  .latency .tlabel--p99 { fill: #E0904F; }
+
+  /* --- SurgeMap diagram: message-passing flow on hover --- */
+  .project__diagram .flow { stroke-dasharray: 5 9; }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .project__diagram:hover .flow { animation: flow 0.9s linear infinite; }
+  }
+
+  @keyframes flow { to { stroke-dashoffset: -14; } }
+
+  /* --- Syntropy "peek at the future" gag --- */
+  .gag-btn {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    background: none;
+    border: 1px dashed var(--line-accent);
+    padding: 7px 12px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .gag-btn:hover { color: #E0904F; border-color: #E0904F; }
+
+  .gag-msg {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #E8503A;
+  }
+
+  .project__diagram .y-future { transition: fill 0.25s ease, stroke 0.25s ease; }
+
+  .project.is-gag .project__diagram .y-future {
+    fill: rgba(232, 80, 58, 0.3);
+    stroke: #E8503A;
+  }
 </style>
 
 <!--
@@ -1100,6 +1285,9 @@
   <div class="bg__reveal"></div>
   <div class="bg__glow"></div>
 </div>
+
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
 
 <div class="page">
 
@@ -1183,8 +1371,17 @@
           </div>
         </div>
 
-        <div class="about__now">
-          &rsaquo; status &mdash; third year &#183; coursework &#183; open to summer 2026 internships &#183; India, remote-friendly &#183; caffeine: nominal
+        <div class="term">
+          <div class="term__cmd">$ shrishaanth --status<span class="term__caret" aria-hidden="true"></span></div>
+          <div class="sys" id="sys">
+            <div class="sys__row"><span>year</span><span>third of five &#183; integrated M.Sc.</span></div>
+            <div class="sys__row"><span>uptime</span><span>~3 yrs &#183; <b>minor outages during exams</b></span></div>
+            <div class="sys__row"><span>open PRs</span><span>3 &#183; all mine</span></div>
+            <div class="sys__row"><span>build</span><span>hand-written &#183; 0 deps</span></div>
+            <div class="sys__row"><span>availability</span><span class="ok">summer 2026 &#183; SDE / backend / applied ML</span></div>
+            <div class="sys__row"><span>location</span><span>Coimbatore, India &#183; remote-friendly</span></div>
+            <div class="sys__row"><span>coffee&rarr;code</span><span>conversion nominal</span></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1351,7 +1548,7 @@
                   <path d="M150 168 L70 186"/>
                   <path d="M70 186 L52 74"/>
                 </g>
-                <g stroke="var(--accent)" fill="none" marker-end="url(#s-ah)">
+                <g class="flow" stroke="var(--accent)" fill="none" marker-end="url(#s-ah)">
                   <path d="M120 52 L96 132"/>
                   <path d="M176 92 L96 132"/>
                 </g>
@@ -1446,7 +1643,7 @@
 
                 <!-- time axis -->
                 <rect x="118" y="46" width="302" height="26" fill="var(--panel)" stroke="var(--line-accent)"/>
-                <rect x="420" y="46" width="222" height="26" fill="url(#y-hatch)" stroke="var(--line)"/>
+                <rect class="y-future" x="420" y="46" width="222" height="26" fill="url(#y-hatch)" stroke="var(--line)"/>
                 <line x1="20" y1="72" x2="642" y2="72" stroke="var(--line-accent)"/>
                 <line x1="420" y1="34" x2="420" y2="118" stroke="var(--accent)" stroke-width="2"/>
                 <text x="420" y="28" text-anchor="middle" class="dgm-label dgm-label--accent">as-of t</text>
@@ -1477,6 +1674,9 @@
               </svg>
               <figcaption>FIG.03 &mdash; POINT-IN-TIME DATA &rarr; HRP &rarr; WALK-FORWARD</figcaption>
             </figure>
+
+            <button type="button" class="gag-btn" data-gag>try: peek past the as-of line &rarr;</button>
+            <p class="gag-msg" id="gag-msg" hidden>DENIED &#183; walk-forward only &#183; no lookahead, ever.</p>
 
             <div class="points">
               <div><b>01</b><p>Estimates time-varying risk via EWMA on a strict point-in-time basis.</p></div>
@@ -1646,7 +1846,27 @@
               Comfortable owning something from spec to deploy. Writes tests he&rsquo;d
               want to inherit. Occasionally gets it right on the first try.
             </p>
-            <div class="contact__ping">$ ping shrishaanth &#183; 200 OK &#183; p50 ~12h, p99 ~48h (exam weeks excluded)</div>
+            <div class="contact__ping">$ ping shrishaanth &#183; 200 OK</div>
+            <figure class="latency">
+              <svg viewBox="0 0 300 74" xmlns="http://www.w3.org/2000/svg" role="img"
+                   aria-label="Reply-latency histogram: right-skewed, median around 12 hours, 99th percentile around 48 hours.">
+                <line x1="6" y1="56" x2="288" y2="56" stroke="var(--line-accent)"/>
+                <rect class="bar" x="8"   y="49" width="28" height="7"/>
+                <rect class="bar" x="40"  y="36" width="28" height="20"/>
+                <rect class="bar" x="72"  y="20" width="28" height="36"/>
+                <rect class="bar" x="104" y="12" width="28" height="44"/>
+                <rect class="bar" x="136" y="26" width="28" height="30"/>
+                <rect class="bar" x="168" y="37" width="28" height="19"/>
+                <rect class="bar" x="200" y="44" width="28" height="12"/>
+                <rect class="bar" x="232" y="48" width="28" height="8"/>
+                <rect class="bar" x="264" y="51" width="28" height="5"/>
+                <line class="tick" x1="120" y1="6" x2="120" y2="60"/>
+                <text class="tlabel" x="120" y="72" text-anchor="middle">p50</text>
+                <line class="tick tick--p99" x1="250" y1="6" x2="250" y2="60"/>
+                <text class="tlabel tlabel--p99" x="250" y="72" text-anchor="middle">p99</text>
+              </svg>
+              <figcaption>reply latency &#183; p50 &asymp; 12h &#183; p99 &asymp; 48h &#183; exam weeks excluded</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -1991,5 +2211,115 @@
         }
       });
     });
+
+    var jsMotion = document.documentElement.classList.contains('js-motion');
+
+    /* ---- 9. custom cursor (fine pointers only) --------------- */
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      var ring = document.querySelector('.cursor-ring');
+      var dot  = document.querySelector('.cursor-dot');
+      if (ring && dot) {
+        var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+        var rx = tx, ry = ty, ready = false;
+        var HOT = 'a,button,input,textarea,select,summary,label,[role="button"],.index__item,.contact__card,.gag-btn';
+
+        window.addEventListener('pointermove', function (e) {
+          tx = e.clientX; ty = e.clientY;
+          dot.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
+          if (!ready) { ready = true; rx = tx; ry = ty; document.body.classList.add('cursor-ready'); }
+        }, { passive: true });
+
+        (function loop() {
+          var k = reduce ? 1 : 0.2;
+          rx += (tx - rx) * k;
+          ry += (ty - ry) * k;
+          ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+          requestAnimationFrame(loop);
+        })();
+
+        document.addEventListener('pointerover', function (e) {
+          if (!e.target || !e.target.closest) return;
+          var field = e.target.closest('input,textarea,select');
+          ring.classList.toggle('is-text', !!field);
+          ring.classList.toggle('is-hot', !field && !!e.target.closest(HOT));
+        });
+        document.addEventListener('pointerdown', function () { ring.classList.add('is-down'); });
+        document.addEventListener('pointerup',   function () { ring.classList.remove('is-down'); });
+        window.addEventListener('blur',  function () { document.body.classList.remove('cursor-ready'); });
+        window.addEventListener('focus', function () { if (ready) document.body.classList.add('cursor-ready'); });
+      }
+    }
+
+    /* ---- 10. click ripple through the grid ------------------- */
+    if (!reduce) {
+      document.addEventListener('pointerdown', function (e) {
+        if (e.target && e.target.closest &&
+            e.target.closest('a,button,input,textarea,select,label,summary')) return;
+        var cx = e.clientX, cy = e.clientY;
+        [0, 120].forEach(function (delay) {
+          var r = document.createElement('div');
+          r.className = 'bg__ripple';
+          r.style.cssText = 'left:' + cx + 'px;top:' + cy + 'px;width:46px;height:46px;animation-delay:' + delay + 'ms';
+          document.body.appendChild(r);
+          r.addEventListener('animationend', function () { r.remove(); });
+          setTimeout(function () { if (r.parentNode) r.remove(); }, 1500);
+        });
+      }, { passive: true });
+    }
+
+    /* ---- 11. terminal --status line + systems panel --------- */
+    var term = document.querySelector('.term__cmd');
+    var sys  = document.getElementById('sys');
+    if (term && sys) {
+      if (!jsMotion || reduce) {
+        sys.classList.add('is-in');
+      } else {
+        var caret = term.querySelector('.term__caret');
+        var cmd = (term.textContent || '').trim();
+        var started = false;
+
+        function runTerm() {
+          if (started) return;
+          started = true;
+          while (term.firstChild && term.firstChild !== caret) term.removeChild(term.firstChild);
+          var k = 0;
+          (function step() {
+            caret.insertAdjacentText('beforebegin', cmd.charAt(k));
+            k++;
+            if (k < cmd.length) { setTimeout(step, 45); }
+            else {
+              sys.classList.add('is-in');
+              setTimeout(function () { if (caret.parentNode) caret.parentNode.removeChild(caret); }, 1600);
+            }
+          })();
+        }
+
+        if ('IntersectionObserver' in window) {
+          var termIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (en.isIntersecting) { runTerm(); termIO.disconnect(); } });
+          }, { rootMargin: '0px 0px -20% 0px', threshold: 0.1 });
+          termIO.observe(term);
+        } else {
+          runTerm();
+        }
+      }
+    }
+
+    /* ---- 12. Syntropy "peek at the future" gag -------------- */
+    var gagBtn = document.querySelector('[data-gag]');
+    if (gagBtn) {
+      var gagCard = gagBtn.closest('.project');
+      var gagMsg = document.getElementById('gag-msg');
+      var gagTimer = null;
+      gagBtn.addEventListener('click', function () {
+        if (gagCard) gagCard.classList.add('is-gag');
+        if (gagMsg) gagMsg.hidden = false;
+        clearTimeout(gagTimer);
+        gagTimer = setTimeout(function () {
+          if (gagCard) gagCard.classList.remove('is-gag');
+          if (gagMsg) gagMsg.hidden = true;
+        }, 1700);
+      });
+    }
   })();
 </script>
