@@ -766,11 +766,22 @@
 
   .resume-viewer__close:hover { color: var(--accent-soft); }
 
-  .resume-viewer iframe {
+  .resume-viewer {
+    max-height: min(85vh, 1100px);
+    overflow: auto;
+  }
+
+  .resume-viewer__bar {
+    position: sticky;
+    top: 0;
+    background: #1c1c1c;
+    z-index: 1;
+  }
+
+  .resume-viewer img {
     display: block;
     width: 100%;
-    height: min(80vh, 900px);
-    border: 0;
+    height: auto;
     background: #fff;
   }
 
@@ -1672,6 +1683,7 @@
 
 
 
+
 <script>
   (function () {
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1944,14 +1956,22 @@
 
     var viewer = document.getElementById('resume-viewer');
     var viewerClose = document.getElementById('resume-viewer-close');
+    var pngEl = document.getElementById('resume-png');
+    var resumePages = (pngEl && pngEl.textContent.trim().indexOf('data:image') === 0)
+      ? pngEl.textContent.trim().split(/\s+/)
+      : [];
 
-    function showInline(url) {
+    // sandboxed frames refuse to render a PDF, so the inline view is
+    // page images rendered from the same PDF at build time.
+    function showInline() {
       if (!viewer) return false;
-      if (!viewer.querySelector('iframe')) {
-        var f = document.createElement('iframe');
-        f.title = 'Résumé — Shrishaanth U';
-        f.src = url;
-        viewer.appendChild(f);
+      if (!viewer.querySelector('img') && resumePages.length) {
+        resumePages.forEach(function (uri, k) {
+          var img = document.createElement('img');
+          img.alt = 'Résumé — Shrishaanth U, page ' + (k + 1);
+          img.src = uri;
+          viewer.appendChild(img);
+        });
       }
       viewer.hidden = false;
       viewer.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
@@ -1968,7 +1988,7 @@
         e.preventDefault();
         var win = window.open(url, '_blank', 'noopener');
         if (!win || win.closed || typeof win.closed === 'undefined') {
-          showInline(url);        // popup blocked → render it on the page instead
+          showInline();           // popup blocked → render it on the page instead
         }
       });
     });
