@@ -1151,18 +1151,25 @@
     border-color: var(--accent-soft);
   }
 
-  /* --- click ripple through the grid --- */
+  /* --- click ripple: concentric rings spreading through the grid --- */
   .bg__ripple {
     position: fixed;
     z-index: 0;
     pointer-events: none;
-    border: 1px solid rgba(61, 123, 255, 0.6);
-    animation: ripple 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(61, 123, 255, 0.55);
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0;
+    animation: ripple 1.5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   }
 
   @keyframes ripple {
-    from { transform: translate(-50%, -50%) scale(0.1); opacity: 0.8; }
-    to   { transform: translate(-50%, -50%) scale(9);   opacity: 0; }
+    0%   { transform: translate(-50%, -50%) scale(0.4);  opacity: 0.7; }
+    12%  { opacity: 0.7; }
+    70%  { opacity: 0.18; }
+    100% { transform: translate(-50%, -50%) scale(var(--r, 26)); opacity: 0; }
   }
 
   /* --- terminal --status line + systems panel --- */
@@ -2110,29 +2117,36 @@
     if (heroName &&
         document.documentElement.classList.contains('js-motion') &&
         !reduce) {
-      var full = heroName.textContent;
-      heroName.setAttribute('aria-label', full);   // keep it whole for screen readers
+      var full = heroName.textContent || 'Shrishaanth U';
+      heroName.setAttribute('aria-label', full.replace(/ /g, ' '));
       heroName.textContent = '';
 
-      var caret = document.createElement('span');
-      caret.className = 'caret';
-      caret.setAttribute('aria-hidden', 'true');
-      heroName.appendChild(caret);
+      var nameCaret = document.createElement('span');
+      nameCaret.className = 'caret';
+      nameCaret.setAttribute('aria-hidden', 'true');
+      heroName.appendChild(nameCaret);
 
       var ci = 0;
       function typeChar() {
-        caret.insertAdjacentText('beforebegin', full.charAt(ci));
+        nameCaret.insertAdjacentText('beforebegin', full.charAt(ci));
         ci++;
         if (ci < full.length) {
           setTimeout(typeChar, 55);
         } else {
-          // let it blink a few beats, then retire the caret
           setTimeout(function () {
-            if (caret.parentNode) caret.parentNode.removeChild(caret);
+            if (nameCaret.parentNode) nameCaret.parentNode.removeChild(nameCaret);
           }, 2400);
         }
       }
       setTimeout(typeChar, 420);   // a beat of just the caret, then it types
+
+      // safety net: never leave the name blank
+      setTimeout(function () {
+        if (heroName.textContent.replace(/\s/g, '').length < full.replace(/\s/g, '').length) {
+          if (nameCaret.parentNode) nameCaret.parentNode.removeChild(nameCaret);
+          heroName.textContent = full;
+        }
+      }, 3600);
     }
 
     /* ---- 6. contact form -> pre-filled email ------------------- */
@@ -2250,19 +2264,27 @@
       }
     }
 
-    /* ---- 10. click ripple through the grid ------------------- */
+    /* ---- 10. click ripple: concentric rings spreading outward ---- */
     if (!reduce) {
+      var lastRipple = 0;
       document.addEventListener('pointerdown', function (e) {
         if (e.target && e.target.closest &&
             e.target.closest('a,button,input,textarea,select,label,summary')) return;
+        var now = Date.now();
+        if (now - lastRipple < 180) return;   // throttle bursts
+        lastRipple = now;
         var cx = e.clientX, cy = e.clientY;
-        [0, 120].forEach(function (delay) {
-          var r = document.createElement('div');
-          r.className = 'bg__ripple';
-          r.style.cssText = 'left:' + cx + 'px;top:' + cy + 'px;width:46px;height:46px;animation-delay:' + delay + 'ms';
-          document.body.appendChild(r);
-          r.addEventListener('animationend', function () { r.remove(); });
-          setTimeout(function () { if (r.parentNode) r.remove(); }, 1500);
+        // three rings, staggered, each reaching a different radius
+        [[0, 30], [140, 22], [280, 15]].forEach(function (cfg) {
+          var ring = document.createElement('div');
+          ring.className = 'bg__ripple';
+          ring.style.left = cx + 'px';
+          ring.style.top = cy + 'px';
+          ring.style.setProperty('--r', cfg[1]);
+          ring.style.animationDelay = cfg[0] + 'ms';
+          document.body.appendChild(ring);
+          ring.addEventListener('animationend', function () { ring.remove(); });
+          setTimeout(function () { if (ring.parentNode) ring.remove(); }, 2200);
         });
       }, { passive: true });
     }
@@ -2274,22 +2296,22 @@
       if (!jsMotion || reduce) {
         sys.classList.add('is-in');
       } else {
-        var caret = term.querySelector('.term__caret');
+        var termCaret = term.querySelector('.term__caret');
         var cmd = (term.textContent || '').trim();
-        var started = false;
+        var termStarted = false;
 
         function runTerm() {
-          if (started) return;
-          started = true;
-          while (term.firstChild && term.firstChild !== caret) term.removeChild(term.firstChild);
-          var k = 0;
+          if (termStarted) return;
+          termStarted = true;
+          while (term.firstChild && term.firstChild !== termCaret) term.removeChild(term.firstChild);
+          var ti = 0;
           (function step() {
-            caret.insertAdjacentText('beforebegin', cmd.charAt(k));
-            k++;
-            if (k < cmd.length) { setTimeout(step, 45); }
+            if (termCaret) termCaret.insertAdjacentText('beforebegin', cmd.charAt(ti));
+            ti++;
+            if (ti < cmd.length) { setTimeout(step, 45); }
             else {
               sys.classList.add('is-in');
-              setTimeout(function () { if (caret.parentNode) caret.parentNode.removeChild(caret); }, 1600);
+              setTimeout(function () { if (termCaret && termCaret.parentNode) termCaret.parentNode.removeChild(termCaret); }, 1600);
             }
           })();
         }
@@ -2302,6 +2324,8 @@
         } else {
           runTerm();
         }
+        // safety net: reveal the panel even if the observer never fires
+        setTimeout(function () { if (!termStarted) runTerm(); }, 6000);
       }
     }
 
