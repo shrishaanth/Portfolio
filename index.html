@@ -734,6 +734,46 @@
     background: rgba(61, 123, 255, 0.1);
   }
 
+  /* inline résumé viewer — fallback when a new tab is blocked (e.g. sandbox) */
+  .resume-viewer {
+    margin-top: 24px;
+    border: 1px solid var(--line-accent);
+    background: #1c1c1c;
+  }
+
+  .resume-viewer__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line-accent);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  .resume-viewer__close {
+    background: none;
+    border: 0;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+
+  .resume-viewer__close:hover { color: var(--accent-soft); }
+
+  .resume-viewer iframe {
+    display: block;
+    width: 100%;
+    height: min(80vh, 900px);
+    border: 0;
+    background: #fff;
+  }
+
   /* colour-coded skill grid */
   .skills { border-top: 1px solid var(--line); }
 
@@ -1079,7 +1119,7 @@
             real-time infrastructure, graph forecasting models and quantitative pipelines.
           </p>
           <div class="actions">
-            <a class="btn btn--primary" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer">VIEW R&Eacute;SUM&Eacute;</a>
+            <a class="btn btn--primary" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer" data-resume>VIEW R&Eacute;SUM&Eacute;</a>
             <a class="btn btn--ghost" href="#projects">PROJECTS</a>
           </div>
         </div>
@@ -1448,10 +1488,17 @@
     <section id="resume" class="pane">
       <div class="sec-head reveal reveal--sm">
         <span class="sec-head__label">RESUME</span>
-        <a class="btn-sm" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer">
+        <a class="btn-sm" href="./Shrishaanth-U-Resume.pdf" target="_blank" rel="noreferrer" data-resume>
           VIEW R&Eacute;SUM&Eacute;
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
         </a>
+      </div>
+
+      <div class="resume-viewer" id="resume-viewer" hidden>
+        <div class="resume-viewer__bar">
+          <span>SHRISHAANTH-U-RESUME.PDF</span>
+          <button type="button" class="resume-viewer__close" id="resume-viewer-close">CLOSE &times;</button>
+        </div>
       </div>
       <div class="reveal">
         <h3 class="pane__h">Education</h3>
@@ -1622,6 +1669,8 @@
 
   </main>
 </div>
+
+
 
 <script>
   (function () {
@@ -1876,6 +1925,52 @@
     var realTitle = document.title;
     document.addEventListener('visibilitychange', function () {
       document.title = document.hidden ? '[ process suspended ] ' + realTitle : realTitle;
+    });
+
+    /* ---- 8. résumé: open in a new tab, or show it inline ------ *
+     * The PDF is embedded as base64 so this works even in a
+     * sandboxed single-file context. On a real deploy the plain
+     * ./Shrishaanth-U-Resume.pdf href is the graceful fallback.   */
+    var resumeUrl = null;
+    var b64 = document.getElementById('resume-b64');
+    if (b64 && b64.textContent && b64.textContent.indexOf('__RESUME') !== 0) {
+      try {
+        var raw = atob(b64.textContent.trim());
+        var bytes = new Uint8Array(raw.length);
+        for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        resumeUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+      } catch (e) { /* fall back to the href */ }
+    }
+
+    var viewer = document.getElementById('resume-viewer');
+    var viewerClose = document.getElementById('resume-viewer-close');
+
+    function showInline(url) {
+      if (!viewer) return false;
+      if (!viewer.querySelector('iframe')) {
+        var f = document.createElement('iframe');
+        f.title = 'Résumé — Shrishaanth U';
+        f.src = url;
+        viewer.appendChild(f);
+      }
+      viewer.hidden = false;
+      viewer.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      return true;
+    }
+
+    if (viewerClose && viewer) {
+      viewerClose.addEventListener('click', function () { viewer.hidden = true; });
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-resume]'), function (a) {
+      a.addEventListener('click', function (e) {
+        var url = resumeUrl || a.getAttribute('href');
+        e.preventDefault();
+        var win = window.open(url, '_blank', 'noopener');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          showInline(url);        // popup blocked → render it on the page instead
+        }
+      });
     });
   })();
 </script>
