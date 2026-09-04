@@ -676,12 +676,7 @@
 
   .pane .sec-head { margin-top: 0; }
 
-  .pane__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(28px, 5vw, 56px);
-    margin-top: 30px;
-  }
+  .pane > .reveal + .reveal:not(.pane__note) { margin-top: 30px; }
 
   .pane__h {
     font-size: 15px;
@@ -737,6 +732,55 @@
   }
 
   .dl-link:hover { color: var(--accent-soft); }
+
+  /* colour-coded skill grid */
+  .skills { border-top: 1px solid var(--line); }
+
+  .skills__row {
+    display: grid;
+    grid-template-columns: 148px 1fr;
+    gap: 24px;
+    align-items: start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .skills__row:last-child { border-bottom: 0; }
+
+  .skills__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--faint);
+    padding-top: 7px;
+    white-space: nowrap;
+  }
+
+  .skills__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skills__chips span {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1;
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--chip-bd, var(--line-accent));
+    background: var(--chip-bg, transparent);
+    color: var(--chip-fg, var(--muted));
+    white-space: nowrap;
+  }
+
+  .skills__row[data-cat="lang"]  { --chip-fg: #7FE9DC; --chip-bd: rgba(79, 209, 197, 0.42); --chip-bg: rgba(79, 209, 197, 0.08); }
+  .skills__row[data-cat="fw"]    { --chip-fg: #C4B5FD; --chip-bd: rgba(167, 139, 250, 0.42); --chip-bg: rgba(167, 139, 250, 0.09); }
+  .skills__row[data-cat="ml"]    { --chip-fg: #F6C177; --chip-bd: rgba(240, 167, 66, 0.42); --chip-bg: rgba(240, 167, 66, 0.09); }
+  .skills__row[data-cat="db"]    { --chip-fg: #93C5FD; --chip-bd: rgba(91, 157, 255, 0.45); --chip-bg: rgba(91, 157, 255, 0.10); }
+  .skills__row[data-cat="tools"] { --chip-fg: #8CE0A8; --chip-bd: rgba(95, 217, 138, 0.42); --chip-bg: rgba(95, 217, 138, 0.09); }
+
+  .rows--edu { max-width: 640px; }
 
   .pane__note {
     margin-top: 28px;
@@ -804,7 +848,8 @@
     .hero { grid-template-columns: 1fr; gap: 36px; }
     .hero__aside { max-width: 190px; }
     .about__body { grid-template-columns: 1fr; gap: 32px; }
-    .pane__grid { grid-template-columns: 1fr; }
+    .skills__row { grid-template-columns: 1fr; gap: 10px; }
+    .skills__label { padding-top: 0; }
     .work { grid-template-columns: 1fr; gap: 28px; }
     .index { position: static; display: flex; gap: 8px; overflow-x: auto; }
     .index__item { border-left: 0; border-top: 2px solid var(--line); flex: 1 0 auto; }
@@ -1229,35 +1274,59 @@
         <span class="sec-head__label">RESUME</span>
         <a class="dl-link" href="#resume">DOWNLOAD PDF &rarr;</a>
       </div>
-      <div class="pane__grid reveal">
-        <div>
-          <h3 class="pane__h">Education</h3>
-          <div class="rows">
-            <div>
-              <span class="rows__k">PSG COLLEGE OF TECHNOLOGY</span>
-              <span class="rows__v">M.Sc. Software Systems (Integrated) &middot; CGPA 9.18 / 10</span>
-              <span class="rows__t">PRESENT</span>
-            </div>
-            <div>
-              <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
-              <span class="rows__v">Class XII &mdash; Higher Secondary (State Board) &middot; 95.6%</span>
-              <span class="rows__t">2024</span>
-            </div>
-            <div>
-              <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
-              <span class="rows__v">Class X &mdash; SSLC (State Board) &middot; 92.6%</span>
-              <span class="rows__t">2022</span>
-            </div>
+      <div class="reveal">
+        <h3 class="pane__h">Education</h3>
+        <div class="rows rows--edu">
+          <div>
+            <span class="rows__k">PSG COLLEGE OF TECHNOLOGY</span>
+            <span class="rows__v">M.Sc. Software Systems (Integrated) &middot; CGPA 9.18 / 10</span>
+            <span class="rows__t">PRESENT</span>
+          </div>
+          <div>
+            <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
+            <span class="rows__v">Class XII &mdash; Higher Secondary (State Board) &middot; 95.6%</span>
+            <span class="rows__t">2024</span>
+          </div>
+          <div>
+            <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
+            <span class="rows__v">Class X &mdash; SSLC (State Board) &middot; 92.6%</span>
+            <span class="rows__t">2022</span>
           </div>
         </div>
-        <div>
-          <h3 class="pane__h">Stack</h3>
-          <div class="rows">
-            <div><span class="rows__k">LANGUAGES</span><span class="rows__v">Python, C++, C, JavaScript, TypeScript</span></div>
-            <div><span class="rows__k">FRAMEWORKS</span><span class="rows__v">Node.js, Express.js, React.js, Socket.IO</span></div>
-            <div><span class="rows__k">DATA &amp; ML</span><span class="rows__v">PyTorch, NumPy, Pandas, scikit-learn, SciPy, Streamlit, Plotly</span></div>
-            <div><span class="rows__k">DATABASES</span><span class="rows__v">MongoDB, Oracle</span></div>
-            <div><span class="rows__k">TOOLS</span><span class="rows__v">Linux, Git, Docker, Postman</span></div>
+      </div>
+
+      <div class="reveal" style="margin-top: clamp(36px, 5vw, 52px);">
+        <h3 class="pane__h">Stack</h3>
+        <div class="skills">
+          <div class="skills__row" data-cat="lang">
+            <span class="skills__label">LANGUAGES</span>
+            <div class="skills__chips">
+              <span>Python</span><span>C++</span><span>C</span><span>JavaScript</span><span>TypeScript</span>
+            </div>
+          </div>
+          <div class="skills__row" data-cat="fw">
+            <span class="skills__label">FRAMEWORKS</span>
+            <div class="skills__chips">
+              <span>Node.js</span><span>Express.js</span><span>React.js</span><span>Socket.IO</span>
+            </div>
+          </div>
+          <div class="skills__row" data-cat="ml">
+            <span class="skills__label">DATA / ML</span>
+            <div class="skills__chips">
+              <span>PyTorch</span><span>NumPy</span><span>Pandas</span><span>scikit-learn</span><span>Matplotlib</span><span>SciPy</span><span>Streamlit</span><span>Plotly</span>
+            </div>
+          </div>
+          <div class="skills__row" data-cat="db">
+            <span class="skills__label">DATABASES</span>
+            <div class="skills__chips">
+              <span>MongoDB</span><span>Oracle</span>
+            </div>
+          </div>
+          <div class="skills__row" data-cat="tools">
+            <span class="skills__label">PLATFORMS &amp; TOOLS</span>
+            <div class="skills__chips">
+              <span>Linux</span><span>Windows</span><span>Git</span><span>Docker</span><span>Postman</span>
+            </div>
           </div>
         </div>
       </div>
