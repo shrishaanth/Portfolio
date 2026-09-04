@@ -1,0 +1,1130 @@
+<title>Circuit Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap">
+
+<script>
+  // Runs before the body paints: marks that JS is live, so scroll-reveal can
+  // start hidden. Without JS (or with reduced motion) every block stays visible.
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) document.documentElement.classList.add('js-motion');
+  })();
+</script>
+
+<style>
+  :root {
+    --bg:          #050509;
+    --panel:       #0A0A12;
+    --line:        #17172A;
+    --line-accent: #1E2E52;
+    --ink:         #E9E9F2;
+    --ink-2:       #C2C2D4;
+    --muted:       #9A9AB2;
+    --faint:       #6E6E85;
+    --dim:         #4A4A60;
+    --accent:      #3D7BFF;
+    --accent-soft: #8FB4FF;
+    --grid:        56px;
+
+    --sans: "Outfit", system-ui, -apple-system, sans-serif;
+    --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ============================================================ *
+   *  Cursor-revealed grid
+   * ============================================================ */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bg__base,
+  .bg__reveal,
+  .bg__glow {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* barely-there grid, always present so the page isn't flat before you move */
+  .bg__base {
+    background-image:
+      repeating-linear-gradient(to right,  #0C0C16 0 1px, transparent 1px var(--grid)),
+      repeating-linear-gradient(to bottom, #0C0C16 0 1px, transparent 1px var(--grid));
+  }
+
+  /* the same grid, lit — masked to a circle that follows the pointer */
+  .bg__reveal {
+    background-image:
+      repeating-linear-gradient(to right,  rgba(61, 123, 255, 0.55) 0 1px, transparent 1px var(--grid)),
+      repeating-linear-gradient(to bottom, rgba(61, 123, 255, 0.55) 0 1px, transparent 1px var(--grid));
+    -webkit-mask-image: radial-gradient(
+      circle 300px at var(--mx, 50%) var(--my, 38%),
+      #000 0%, rgba(0, 0, 0, 0.55) 42%, transparent 72%);
+    mask-image: radial-gradient(
+      circle 300px at var(--mx, 50%) var(--my, 38%),
+      #000 0%, rgba(0, 0, 0, 0.55) 42%, transparent 72%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .bg__glow {
+    background: radial-gradient(
+      circle 360px at var(--mx, 50%) var(--my, 38%),
+      rgba(61, 123, 255, 0.10), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .bg.is-live .bg__reveal,
+  .bg.is-live .bg__glow { opacity: 1; }
+
+  /* one fixed bloom at the top so the hero never sits on pure black */
+  .bg__ambient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(700px 380px at 22% 4%, rgba(61, 123, 255, 0.13), transparent 68%);
+  }
+
+  .page { position: relative; z-index: 1; }
+
+  /* ============================================================ *
+   *  Layout
+   * ============================================================ */
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 60px);
+  }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(180deg, rgba(5, 5, 9, 0.92), rgba(5, 5, 9, 0.6) 70%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .brand__dot {
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    box-shadow: 0 0 12px 1px rgba(61, 123, 255, 0.8);
+    flex: none;
+  }
+
+  .nav__tabs {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .nav__tabs a {
+    position: relative;
+    z-index: 1;
+    padding: 7px clamp(9px, 1.6vw, 14px);
+    color: var(--faint);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .nav__tabs a:hover { color: var(--ink); }
+
+  .nav__tabs a.is-active { color: var(--accent-soft); }
+
+  /* the bubble that slides to sit behind the active tab */
+  .nav__bubble {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--bw, 0);
+    transform: translateX(var(--bx, 0));
+    background: rgba(61, 123, 255, 0.14);
+    border: 1px solid var(--line-accent);
+    box-shadow: 0 0 16px -4px rgba(61, 123, 255, 0.55);
+    pointer-events: none;
+    z-index: 0;
+    /* no overshoot — a clean ease so it tracks the scroll without wobbling.
+       --dur is bumped to match the glide duration on a tab click. */
+    transition:
+      transform var(--bubble-dur, 0.42s) cubic-bezier(0.4, 0, 0.2, 1),
+      width var(--bubble-dur, 0.42s) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav__bubble.is-idle { opacity: 0; }
+
+  .nav__ver {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 2.4fr 0.75fr;
+    gap: clamp(36px, 5vw, 64px);
+    align-items: start;
+    padding: clamp(56px, 8vw, 88px) 0 0;
+    scroll-margin-top: 90px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--line-accent);
+    background: rgba(61, 123, 255, 0.08);
+    padding: 6px 13px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--accent-soft);
+  }
+
+  .badge__pulse {
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    box-shadow: 0 0 8px 1px rgba(61, 123, 255, 0.9);
+    flex: none;
+  }
+
+  .hero__name {
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 0.98;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    margin-top: 26px;
+    text-wrap: balance;
+    min-height: 0.98em;   /* reserve the line so nothing jumps while it types */
+  }
+
+  /* terminal caret shown only while / just after the name types itself in */
+  .hero__name .caret {
+    display: inline-block;
+    width: 3px;
+    height: 0.82em;
+    margin-left: 7px;
+    background: var(--accent);
+    box-shadow: 0 0 12px 1px rgba(61, 123, 255, 0.7);
+    vertical-align: -0.04em;
+    animation: caret-blink 1.05s step-end infinite;
+  }
+
+  @keyframes caret-blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+
+  .rule-glow {
+    width: 120px;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 14px 1px rgba(61, 123, 255, 0.7);
+    margin-top: 22px;
+  }
+
+  .hero__blurb {
+    font-size: clamp(16px, 2vw, 18px);
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 530px;
+    margin-top: 24px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 13px 22px;
+    text-decoration: none;
+    transition: transform 0.09s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .btn:active { transform: translateY(1px); }
+
+  .btn--primary {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 24px -4px rgba(61, 123, 255, 0.7);
+  }
+
+  .btn--primary:hover { box-shadow: 0 0 34px -2px rgba(61, 123, 255, 0.85); }
+
+  .btn--ghost {
+    border: 1px solid var(--line-accent);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .btn--ghost:hover { background: rgba(61, 123, 255, 0.07); }
+
+  .portrait {
+    width: 100%;
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+
+  .facts {
+    max-width: 190px;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: var(--panel);
+  }
+
+  .facts div,
+  .facts a {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .facts > :last-child { border-bottom: 0; }
+  .facts span:first-child { color: var(--faint); }
+  .facts a:hover span:last-child { color: var(--accent-soft); }
+
+  /* ---------- section head ---------- */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: clamp(64px, 9vw, 96px);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line-accent);
+  }
+
+  .sec-head__label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .sec-head__count {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+  }
+
+  /* ---------- projects ---------- */
+  .work {
+    display: grid;
+    grid-template-columns: 244px 1fr;
+    gap: 52px;
+    margin-top: 34px;
+    align-items: start;
+  }
+
+  .index {
+    position: sticky;
+    top: 96px;
+  }
+
+  .index__item {
+    display: flex;
+    gap: 13px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--line);
+    text-decoration: none;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .index__no {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    padding-top: 2px;
+    transition: color 0.25s ease;
+  }
+
+  .index__name {
+    font-size: 15.5px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--muted);
+    transition: color 0.25s ease, font-weight 0.25s ease;
+  }
+
+  .index__cat {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    margin-top: 4px;
+    transition: color 0.25s ease;
+  }
+
+  .index__item.is-active {
+    background: rgba(61, 123, 255, 0.10);
+    border-left-color: var(--accent);
+  }
+
+  .index__item.is-active .index__no  { color: var(--accent); }
+  .index__item.is-active .index__name { color: var(--ink); font-weight: 600; }
+  .index__item.is-active .index__cat { color: var(--accent-soft); }
+
+  .index__sticky-note {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: #33334A;
+    margin-top: 18px;
+    padding-left: 16px;
+  }
+
+  /* each project is a self-contained bordered card */
+  .project {
+    border: 1px solid var(--line);
+    background: #09090F;
+    transition: border-color 0.25s ease;
+  }
+
+  .project:hover { border-color: var(--line-accent); }
+
+  .project.is-active { border-color: var(--line-accent); }
+
+  .project + .project { margin-top: clamp(28px, 4vw, 44px); }
+
+  .shot {
+    width: 100%;
+    height: clamp(200px, 30vw, 294px);
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+
+  .project__body {
+    padding: clamp(22px, 3vw, 30px);
+  }
+
+  .project__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .project__name {
+    font-size: clamp(26px, 3.6vw, 34px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+
+  .project__year {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+    flex: none;
+  }
+
+  .project__lead {
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 640px;
+    margin-top: 13px;
+  }
+
+  .points {
+    margin-top: 24px;
+    max-width: 640px;
+    border-top: 1px solid var(--line);
+  }
+
+  .points > div {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .points b {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 500;
+    color: var(--accent);
+    padding-top: 4px;
+    flex: none;
+  }
+
+  .points p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 22px;
+  }
+
+  .tags span {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent-soft);
+    border: 1px solid var(--line-accent);
+    padding: 5px 10px;
+  }
+
+  .links {
+    display: flex;
+    gap: 22px;
+    margin-top: 22px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .links a { color: var(--accent); text-decoration: none; }
+  .links a:hover { color: var(--accent-soft); }
+  .links a.muted { color: var(--faint); }
+
+  /* ---------- résumé + contact panes ---------- */
+  section[id] { scroll-margin-top: 88px; }
+
+  .pane { margin-top: clamp(64px, 9vw, 96px); }
+
+  .pane .sec-head { margin-top: 0; }
+
+  .pane__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 56px);
+    margin-top: 30px;
+  }
+
+  .pane__h {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .rows { border-top: 1px solid var(--line); }
+
+  .rows > div,
+  .rows > a {
+    display: block;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+
+  .rows > :last-child { border-bottom: 0; }
+
+  .rows__k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .rows__v {
+    display: block;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin-top: 4px;
+  }
+
+  .rows__t {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    margin-top: 5px;
+    display: block;
+  }
+
+  .contact-rows > a:hover .rows__v { color: var(--accent-soft); }
+
+  .dl-link {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .dl-link:hover { color: var(--accent-soft); }
+
+  /* ---------- footer ---------- */
+  .foot {
+    margin-top: clamp(72px, 10vw, 110px);
+    padding: 22px 0 60px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--dim);
+  }
+
+  /* ============================================================ *
+   *  Scroll reveal  (M4 / M5 from the motion spec)
+   *  Re-arms every time a block leaves the viewport, so it glides
+   *  back up on each re-entry rather than firing once.
+   * ============================================================ */
+  .js-motion .reveal {
+    transition:
+      opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.25s ease;
+    will-change: opacity, transform;
+  }
+
+  .js-motion .reveal:not(.is-in) {
+    opacity: 0;
+    transform: translateY(56px);
+  }
+
+  /* smaller travel for the section header */
+  .js-motion .reveal--sm:not(.is-in) {
+    transform: translateY(24px);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; gap: 36px; }
+    .hero__aside { max-width: 190px; }
+    .pane__grid { grid-template-columns: 1fr; }
+    .work { grid-template-columns: 1fr; gap: 28px; }
+    .index { position: static; display: flex; gap: 8px; overflow-x: auto; }
+    .index__item { border-left: 0; border-top: 2px solid var(--line); flex: 1 0 auto; }
+    .index__item.is-active { border-left: 0; border-top-color: var(--accent); }
+    .index__sticky-note { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+    .bg__reveal, .bg__glow { display: none; }
+  }
+</style>
+
+<div class="bg" id="bg" aria-hidden="true">
+  <div class="bg__ambient"></div>
+  <div class="bg__base"></div>
+  <div class="bg__reveal"></div>
+  <div class="bg__glow"></div>
+</div>
+
+<div class="page">
+
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href="#about"><span class="brand__dot"></span>SHRISHAANTH_U</a>
+      <nav class="nav__tabs" id="tabs" aria-label="Primary">
+        <span class="nav__bubble is-idle" aria-hidden="true"></span>
+        <a href="#about" class="is-active" aria-current="page">ABOUT</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#resume">RESUME</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+      <span class="nav__ver">v2026.1</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero" id="about">
+      <div>
+        <span class="badge"><span class="badge__pulse"></span>OPEN &mdash; INTERNSHIPS 2026</span>
+        <h1 class="hero__name">Shrishaanth&nbsp;U</h1>
+        <div class="rule-glow"></div>
+        <p class="hero__blurb">
+          Computer science student at PSG College of Technology. I build real-time
+          infrastructure, graph forecasting models and quantitative pipelines.
+        </p>
+        <div class="actions">
+          <a class="btn btn--primary" href="#resume">RESUME.PDF</a>
+          <a class="btn btn--ghost" href="#projects">PROJECTS</a>
+        </div>
+      </div>
+
+      <div class="hero__aside">
+        <div class="portrait">PORTRAIT</div>
+        <div class="facts">
+          <div><span>CGPA</span><span style="color:var(--accent)">9.18</span></div>
+          <div><span>LOC</span><span>COIMBATORE</span></div>
+          <a href="https://github.com/shrishaanth" target="_blank" rel="noreferrer"><span>GH</span><span>/shrishaanth</span></a>
+          <a href="https://www.linkedin.com/in/shrishaanth-dev" target="_blank" rel="noreferrer"><span>LI</span><span>/dev</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+
+    <div class="sec-head reveal reveal--sm">
+      <span class="sec-head__label">SELECTED_WORK</span>
+      <span class="sec-head__count">[ 03 ]</span>
+    </div>
+
+    <div class="work">
+
+      <nav class="index" id="index" aria-label="Projects">
+        <a class="index__item is-active" data-target="p1" href="#p1">
+          <span class="index__no">01</span>
+          <span>
+            <span class="index__name">Taskify.io</span>
+            <span class="index__cat" style="display:block">FULL-STACK</span>
+          </span>
+        </a>
+        <a class="index__item" data-target="p2" href="#p2">
+          <span class="index__no">02</span>
+          <span>
+            <span class="index__name">SurgeMap</span>
+            <span class="index__cat" style="display:block">MACHINE-LEARNING</span>
+          </span>
+        </a>
+        <a class="index__item" data-target="p3" href="#p3">
+          <span class="index__no">03</span>
+          <span>
+            <span class="index__name">Syntropy</span>
+            <span class="index__cat" style="display:block">QUANTITATIVE</span>
+          </span>
+        </a>
+        <div class="index__sticky-note">STICKY</div>
+      </nav>
+
+      <div>
+
+        <article class="project reveal" id="p1">
+          <div class="shot">SCREENSHOT</div>
+          <div class="project__body">
+            <div class="project__head">
+              <h2 class="project__name">Taskify.io</h2>
+              <span class="project__year">2025</span>
+            </div>
+            <p class="project__lead">
+              Multi-tenant Kanban where every board edit syncs live across clients, with tenant
+              isolation enforced at the database on every request.
+            </p>
+            <div class="points">
+              <div><b>01</b><p>Two-layer RBAC, re-checked on every request rather than cached at login.</p></div>
+              <div><b>02</b><p>Room-scoped Socket.IO events with optimistic, server-reconciled moves.</p></div>
+              <div><b>03</b><p>JWT auth with rotating, revocable refresh tokens.</p></div>
+            </div>
+            <div class="tags">
+              <span>TypeScript</span><span>React</span><span>Node</span><span>Express</span><span>MongoDB</span><span>Socket.IO</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/shrishaanth/Taskify.io" target="_blank" rel="noreferrer">SOURCE &rarr;</a>
+              <a class="muted" href="#p1">LIVE_DEMO &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal" id="p2">
+          <div class="shot">SCREENSHOT</div>
+          <div class="project__body">
+            <div class="project__head">
+              <h2 class="project__name">SurgeMap</h2>
+              <span class="project__year">2025</span>
+            </div>
+            <p class="project__lead">
+              Graph neural network forecasting taxi demand across 253 NYC zones &mdash; cuts RMSE by
+              3&ndash;10% against ridge regression, with the largest gains at the longest horizons.
+            </p>
+            <div class="points">
+              <div><b>01</b><p>Graph engine over a 253-zone NYC TLC directed graph with a custom graph convolution.</p></div>
+              <div><b>02</b><p>A GRU reads 4-hour spatial history to emit 5 / 15 / 30 / 60-minute forecasts per zone.</p></div>
+              <div><b>03</b><p>Benchmarked against ridge regression across every horizon.</p></div>
+            </div>
+            <div class="tags">
+              <span>PyTorch</span><span>NumPy</span><span>Pandas</span><span>scikit-learn</span><span>Matplotlib</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/shrishaanth/SurgeMap" target="_blank" rel="noreferrer">SOURCE &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal" id="p3">
+          <div class="shot">SCREENSHOT</div>
+          <div class="project__body">
+            <div class="project__head">
+              <h2 class="project__name">Syntropy</h2>
+              <span class="project__year">2024</span>
+            </div>
+            <p class="project__lead">
+              Point-in-time quantitative pipeline with walk-forward backtesting and zero
+              future-data leakage &mdash; the failure mode that invalidates most student quant work.
+            </p>
+            <div class="points">
+              <div><b>01</b><p>Estimates time-varying risk via EWMA on a strict point-in-time basis.</p></div>
+              <div><b>02</b><p>Allocates capital through a Hierarchical Risk Parity engine.</p></div>
+              <div><b>03</b><p>Outputs a Streamlit dashboard for benchmarking against baselines.</p></div>
+            </div>
+            <div class="tags">
+              <span>Python</span><span>Pandas</span><span>NumPy</span><span>SciPy</span><span>Streamlit</span><span>Plotly</span>
+            </div>
+            <div class="links">
+              <a href="https://github.com/shrishaanth/Syntropy" target="_blank" rel="noreferrer">SOURCE &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+    </section>
+
+    <section id="resume" class="pane">
+      <div class="sec-head reveal reveal--sm">
+        <span class="sec-head__label">RESUME</span>
+        <a class="dl-link" href="#resume">DOWNLOAD PDF &rarr;</a>
+      </div>
+      <div class="pane__grid reveal">
+        <div>
+          <h3 class="pane__h">Education</h3>
+          <div class="rows">
+            <div>
+              <span class="rows__k">PSG COLLEGE OF TECHNOLOGY</span>
+              <span class="rows__v">M.Sc. Software Systems (Integrated) &middot; CGPA 9.18 / 10</span>
+              <span class="rows__t">PRESENT</span>
+            </div>
+            <div>
+              <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
+              <span class="rows__v">Class XII &mdash; Higher Secondary (State Board) &middot; 95.6%</span>
+              <span class="rows__t">2024</span>
+            </div>
+            <div>
+              <span class="rows__k">S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE</span>
+              <span class="rows__v">Class X &mdash; SSLC (State Board) &middot; 92.6%</span>
+              <span class="rows__t">2022</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="pane__h">Stack</h3>
+          <div class="rows">
+            <div><span class="rows__k">LANGUAGES</span><span class="rows__v">Python, C++, C, JavaScript, TypeScript</span></div>
+            <div><span class="rows__k">FRAMEWORKS</span><span class="rows__v">Node.js, Express.js, React.js, Socket.IO</span></div>
+            <div><span class="rows__k">DATA &amp; ML</span><span class="rows__v">PyTorch, NumPy, Pandas, scikit-learn, SciPy, Streamlit, Plotly</span></div>
+            <div><span class="rows__k">DATABASES</span><span class="rows__v">MongoDB, Oracle</span></div>
+            <div><span class="rows__k">TOOLS</span><span class="rows__v">Linux, Git, Docker, Postman</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="pane">
+      <div class="sec-head reveal reveal--sm">
+        <span class="sec-head__label">CONTACT</span>
+        <span class="sec-head__count">REPLY WITHIN A DAY OR TWO</span>
+      </div>
+      <div class="rows contact-rows reveal" style="max-width:640px; margin-top:30px;">
+        <a href="mailto:shrishaanth2024@gmail.com"><span class="rows__k">EMAIL</span><span class="rows__v">shrishaanth2024@gmail.com</span></a>
+        <a href="https://github.com/shrishaanth" target="_blank" rel="noreferrer"><span class="rows__k">GITHUB</span><span class="rows__v">github.com/shrishaanth</span></a>
+        <a href="https://www.linkedin.com/in/shrishaanth-dev" target="_blank" rel="noreferrer"><span class="rows__k">LINKEDIN</span><span class="rows__v">linkedin.com/in/shrishaanth-dev</span></a>
+        <div><span class="rows__k">PHONE</span><span class="rows__v">+91 70100 48373</span></div>
+        <div><span class="rows__k">LOCATION</span><span class="rows__v">Coimbatore, India &middot; open to remote</span></div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>&copy; 2026 SHRISHAANTH_U</span>
+      <span>PROTOTYPE &mdash; DIRECTION L / CIRCUIT</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- 1. cursor-revealed grid -------------------------------- */
+    var bg = document.getElementById('bg');
+    if (bg && !reduce && window.matchMedia('(hover: hover)').matches) {
+      var px = 0, py = 0, queued = false;
+
+      function paint() {
+        queued = false;
+        bg.style.setProperty('--mx', px + 'px');
+        bg.style.setProperty('--my', py + 'px');
+      }
+
+      window.addEventListener('pointermove', function (e) {
+        px = e.clientX;
+        py = e.clientY;
+        if (!bg.classList.contains('is-live')) bg.classList.add('is-live');
+        if (!queued) { queued = true; requestAnimationFrame(paint); }
+      }, { passive: true });
+
+      document.addEventListener('pointerleave', function () {
+        bg.classList.remove('is-live');
+      });
+    }
+
+    /* ---- 2. scroll reveal for project blocks --------------------- *
+     * Toggles both ways: a block glides up + fades in as it enters
+     * the viewport, and drops back to its hidden state once it has
+     * left, so it re-animates every time you scroll back to it.     */
+    var revealables = document.querySelectorAll('.reveal');
+
+    if (reduce || !('IntersectionObserver' in window)) {
+      revealables.forEach(function (el) { el.classList.add('is-in'); });
+    } else {
+      var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('is-in', entry.isIntersecting);
+        });
+      }, {
+        // start the entrance a little before the block is fully on screen,
+        // and re-arm once it is ~15% past either edge
+        rootMargin: '-8% 0px -15% 0px',
+        threshold: 0
+      });
+
+      revealables.forEach(function (el) { revealObserver.observe(el); });
+    }
+
+    /* ---- 3. sticky index tracks the project you're reading ------- */
+    var items = Array.prototype.slice.call(document.querySelectorAll('.index__item'));
+    var projects = Array.prototype.slice.call(document.querySelectorAll('.project'));
+
+    if ('IntersectionObserver' in window && items.length) {
+      var activeObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.id;
+          items.forEach(function (it) {
+            it.classList.toggle('is-active', it.dataset.target === id);
+          });
+          projects.forEach(function (p) {
+            p.classList.toggle('is-active', p.id === id);
+          });
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+      projects.forEach(function (p) { activeObserver.observe(p); });
+    }
+
+    /* ---- 4. bubble tab indicator + slow glide-scroll ------------- */
+    var tabsWrap = document.getElementById('tabs');
+    var bubble   = tabsWrap && tabsWrap.querySelector('.nav__bubble');
+    var tabs     = tabsWrap
+      ? Array.prototype.slice.call(tabsWrap.querySelectorAll('a'))
+      : [];
+    var sections = tabs
+      .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+      .filter(Boolean);
+    var navEl = document.querySelector('.nav');
+
+    function moveBubble(tab) {
+      if (!bubble || !tab) return;
+      bubble.classList.remove('is-idle');
+      bubble.style.setProperty('--bx', tab.offsetLeft + 'px');
+      bubble.style.setProperty('--bw', tab.offsetWidth + 'px');
+    }
+
+    function setActiveTab(tab) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.classList.toggle('is-active', on);
+        if (on) { t.setAttribute('aria-current', 'page'); }
+        else    { t.removeAttribute('aria-current'); }
+      });
+      moveBubble(tab);
+    }
+
+    var GLIDE_MS = 850;
+    var gliding = false;   // true while a click-driven glide is running
+
+    function currentTab() {
+      return tabs.find(function (t) { return t.classList.contains('is-active'); }) || tabs[0];
+    }
+
+    // easeInOutCubic — deliberate, unhurried
+    function glideTo(targetY, duration, done) {
+      var startY = window.pageYOffset;
+      var delta  = targetY - startY;
+      if (Math.abs(delta) < 2) { if (done) done(); return; }
+      var t0 = null;
+      function frame(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min((ts - t0) / duration, 1);
+        var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+        window.scrollTo(0, startY + delta * e);
+        if (p < 1) requestAnimationFrame(frame);
+        else if (done) done();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    if (tabs.length && bubble) {
+      // position the bubble under ABOUT once fonts have settled
+      moveBubble(currentTab());
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () { moveBubble(currentTab()); });
+      }
+      window.addEventListener('resize', function () { moveBubble(currentTab()); });
+
+      // click a tab: bubble glides in step with the screen, over the same
+      // duration, and the scrollspy is muted so passing sections can't yank it
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function (e) {
+          var target = document.querySelector(tab.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+
+          var navH = navEl ? navEl.offsetHeight : 0;
+          var y = target.getBoundingClientRect().top + window.pageYOffset - navH - 16;
+          history.replaceState(null, '', tab.getAttribute('href'));
+
+          if (reduce) {
+            setActiveTab(tab);
+            window.scrollTo(0, y);
+            return;
+          }
+
+          gliding = true;
+          bubble.style.setProperty('--bubble-dur', (GLIDE_MS / 1000) + 's');
+          setActiveTab(tab);                 // bubble sets off now, at glide speed
+          glideTo(y, GLIDE_MS, function () {
+            bubble.style.removeProperty('--bubble-dur');   // back to snappy for scroll
+            setTimeout(function () { gliding = false; }, 60);
+          });
+        });
+      });
+
+      // scrollspy: keep the bubble in sync while the user scrolls by hand
+      if ('IntersectionObserver' in window && sections.length) {
+        var spy = new IntersectionObserver(function (entries) {
+          if (gliding) return;
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var tab = tabs.find(function (t) {
+              return t.getAttribute('href') === '#' + entry.target.id;
+            });
+            if (tab) setActiveTab(tab);
+          });
+        }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+        sections.forEach(function (s) { spy.observe(s); });
+
+        // make sure the last tab lights up once the page is scrolled to the end
+        window.addEventListener('scroll', function () {
+          if (gliding) return;
+          var atBottom = window.innerHeight + window.pageYOffset
+            >= document.documentElement.scrollHeight - 72;
+          if (atBottom) setActiveTab(tabs[tabs.length - 1]);
+        }, { passive: true });
+      }
+    }
+
+    /* ---- 5. terminal type-on for the hero name (first paint) ----- *
+     * The full name is the element's real text, so with JS off or
+     * reduced motion it is simply there. Otherwise it is cleared and
+     * typed back in with a blinking block caret.                     */
+    var heroName = document.querySelector('.hero__name');
+    if (heroName &&
+        document.documentElement.classList.contains('js-motion') &&
+        !reduce) {
+      var full = heroName.textContent;
+      heroName.setAttribute('aria-label', full);   // keep it whole for screen readers
+      heroName.textContent = '';
+
+      var caret = document.createElement('span');
+      caret.className = 'caret';
+      caret.setAttribute('aria-hidden', 'true');
+      heroName.appendChild(caret);
+
+      var ci = 0;
+      function typeChar() {
+        caret.insertAdjacentText('beforebegin', full.charAt(ci));
+        ci++;
+        if (ci < full.length) {
+          setTimeout(typeChar, 55);
+        } else {
+          // let it blink a few beats, then retire the caret
+          setTimeout(function () {
+            if (caret.parentNode) caret.parentNode.removeChild(caret);
+          }, 2400);
+        }
+      }
+      setTimeout(typeChar, 420);   // a beat of just the caret, then it types
+    }
+  })();
+</script>
