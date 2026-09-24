@@ -32,13 +32,6 @@ export default function Hero() {
             <SplitText text="Shrishaanth" baseDelay={120} />
           </span>
           <span className="hero__line hero__line--2">
-            <span
-              className="hero__pill intro"
-              style={{ '--d': '620ms' } as React.CSSProperties}
-              aria-hidden="true"
-            >
-              <img src="/portrait.jpg" alt="" />
-            </span>
             <SplitText text="U." className="hero__u" baseDelay={560} />
             <span className="hero__role intro" style={{ '--d': '820ms' } as React.CSSProperties}>
               CS student building <br />
