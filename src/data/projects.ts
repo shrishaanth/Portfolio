@@ -15,6 +15,7 @@ export interface ProjectData {
   tags: { cat: SkillCategory; label: string }[];
   source: string;
   gag?: boolean; // Syntropy's "peek at the future" easter egg
+  hue: string; // per-project accent, drives the card glow + diagram
 }
 
 export const projects: ProjectData[] = [
@@ -50,6 +51,7 @@ export const projects: ProjectData[] = [
       { cat: 'fw', label: 'Socket.IO' },
     ],
     source: 'https://github.com/shrishaanth/Taskify.io',
+    hue: '#ff6a2b',
   },
   {
     id: 'p2',
@@ -87,6 +89,7 @@ export const projects: ProjectData[] = [
       { cat: 'ml', label: 'Matplotlib' },
     ],
     source: 'https://github.com/shrishaanth/SurgeMap',
+    hue: '#a08bff',
   },
   {
     id: 'p3',
@@ -120,6 +123,7 @@ export const projects: ProjectData[] = [
       { cat: 'ml', label: 'Plotly' },
     ],
     source: 'https://github.com/shrishaanth/Syntropy',
+    hue: '#3fd9a6',
     gag: true,
   },
 ];

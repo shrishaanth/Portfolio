@@ -1,0 +1,259 @@
+/* ============================================================ *
+ *  Hero
+ * ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding: 128px 0 clamp(56px, 8vh, 96px);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 2s ease;
+  mask-image: radial-gradient(ellipse 80% 70% at 65% 38%, #000 25%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 65% 38%, #000 25%, transparent 78%);
+}
+.hero__canvas.is-ready {
+  opacity: 1;
+}
+.hero__glow {
+  position: absolute;
+  z-index: -2;
+  top: -20%;
+  right: -10%;
+  width: min(900px, 90vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 106, 43, 0.22), rgba(255, 106, 43, 0) 62%);
+  filter: blur(20px);
+  animation: drift 18s var(--ease-in-out) infinite alternate;
+}
+@keyframes drift {
+  to {
+    transform: translate(-12%, 14%) scale(1.15);
+  }
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vh, 44px);
+}
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.hero__meta-r {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.hero__sep {
+  margin-inline: 6px;
+  color: var(--faint);
+}
+
+/* the name */
+.hero__title {
+  font-size: var(--fs-hero);
+  font-weight: 600;
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+  margin-left: -0.05em;
+}
+.hero__line {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.hero__line--2 {
+  gap: 0.12em;
+}
+.hero__u {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+/* portrait tucked into the second line of the name */
+.hero__pill {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 1.5em;
+  height: 0.72em;
+  margin-top: 0.06em;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--line-2);
+  transition: width 0.7s var(--ease-out);
+}
+.hero__pill img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+  filter: grayscale(1) contrast(1.05) brightness(0.9);
+  transform: scale(1.15);
+  transition:
+    filter 0.6s,
+    transform 0.8s var(--ease-out);
+}
+.hero__pill:hover {
+  width: 2.1em;
+}
+.hero__pill:hover img {
+  filter: none;
+  transform: scale(1);
+}
+
+.hero__role {
+  margin-left: auto;
+  align-self: flex-end;
+  padding-bottom: 0.14em;
+  font-family: var(--display);
+  font-size: var(--fs-lg);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  text-align: right;
+}
+.rotator {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  color: var(--ink);
+}
+/* block, so the clipping box is sized by the (larger) serif word itself */
+.rotator__word {
+  display: block;
+  padding: 0.05em 0.12em 0.12em 0;
+  line-height: 1.15;
+  white-space: nowrap;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3em;
+  letter-spacing: -0.005em;
+  animation: roll 0.7s var(--ease-out);
+}
+@keyframes roll {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.hero__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 28px 48px;
+  padding-top: clamp(20px, 3vh, 36px);
+  border-top: 1px solid var(--line);
+}
+.hero__lede {
+  max-width: 52ch;
+  font-size: var(--fs-lg);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.hero__scroll-track {
+  position: relative;
+  width: 1px;
+  height: 28px;
+  overflow: hidden;
+  background: var(--line-2);
+}
+.hero__scroll-thumb {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  animation: scroll-hint 2.2s var(--ease-in-out) infinite;
+}
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero__foot {
+    grid-template-columns: 1fr;
+  }
+  .hero__line--2 {
+    flex-wrap: wrap;
+  }
+  .hero__role {
+    width: 100%;
+    margin: 0;
+    padding: 0.9rem 0 0;
+    text-align: left;
+  }
+  .hero__role br {
+    display: none;
+  }
+  .hero__scroll {
+    display: none;
+  }
+}
+@media (max-width: 520px) {
+  .hero {
+    padding-top: 108px;
+  }
+  .hero__title {
+    font-size: 17.5vw;
+  }
+  .hero__meta-r {
+    display: none;
+  }
+  .hero__actions {
+    flex-direction: column;
+  }
+  .hero__actions .btn {
+    justify-content: center;
+    height: 52px;
+  }
+  .term {
+    font-size: 0.72rem;
+  }
+}

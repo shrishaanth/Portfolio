@@ -1,42 +1,78 @@
 /* ============================================================ *
- *  Design tokens — Circuit palette
+ *  Design tokens — "Ember" : warm ink, cream type, one hot accent
  * ============================================================ */
 :root {
-  --bg: #050509;
-  --panel: #0a0a12;
-  --line: #17172a;
-  --line-accent: #1e2e52;
-  --ink: #e9e9f2;
-  --ink-2: #c2c2d4;
-  --muted: #9a9ab2;
-  --faint: #6e6e85;
-  --dim: #4a4a60;
-  --accent: #3d7bff;
-  --accent-soft: #8fb4ff;
-  --grid: 56px;
+  /* surfaces, darkest → lightest */
+  --bg: #0b0a09;
+  --bg-2: #100e0d;
+  --surface: #151311;
+  --surface-2: #1c1917;
+  --surface-3: #25211e;
 
-  --sans: 'Outfit', system-ui, -apple-system, sans-serif;
-  --mono: 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* lines */
+  --line: rgba(243, 232, 216, 0.08);
+  --line-2: rgba(243, 232, 216, 0.14);
+  --line-3: rgba(243, 232, 216, 0.24);
+
+  /* type */
+  --ink: #f3eee6;
+  --ink-2: #cbc3b7;
+  --muted: #8f877c;
+  --faint: #5f5850;
+
+  /* accent + support hues (one per project / skill category) */
+  --accent: #ff6a2b;
+  --accent-2: #ffa06f;
+  --accent-ink: #1b0b03;
+  --accent-soft: rgba(255, 106, 43, 0.14);
+  --violet: #a08bff;
+  --mint: #3fd9a6;
+  --amber: #ffc857;
+  --sky: #6cc4ff;
+
+  /* type families */
+  --display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* type scale */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: clamp(1.125rem, 1rem + 0.45vw, 1.3rem);
+  --fs-xl: clamp(1.4rem, 1.1rem + 1.1vw, 2rem);
+  --fs-2xl: clamp(2.1rem, 1.3rem + 3.2vw, 4.4rem);
+  --fs-hero: clamp(3.6rem, 0.8rem + 12.4vw, 13.5rem);
+
+  /* shape + space */
+  --r-sm: 10px;
+  --r: 18px;
+  --r-lg: 28px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --maxw: 1320px;
+  --section-y: clamp(96px, 13vw, 180px);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   color-scheme: dark;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* category colours, used by chips, tags and the skill matrix */
+[data-cat='lang'] {
+  --cat: var(--accent);
 }
-
-html,
-body {
-  margin: 0;
-  padding: 0;
+[data-cat='fw'] {
+  --cat: var(--violet);
 }
-
-img {
-  max-width: 100%;
+[data-cat='ml'] {
+  --cat: var(--mint);
 }
-
-[hidden] {
-  display: none !important;
+[data-cat='db'] {
+  --cat: var(--amber);
+}
+[data-cat='tools'] {
+  --cat: var(--sky);
 }

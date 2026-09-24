@@ -80,3 +80,32 @@ export const education = [
 export const RESUME_ID = '1Gpt30T3k-4t7LPenap52BrzmcGAnOGeZ';
 export const RESUME_HREF = `https://drive.google.com/file/d/${RESUME_ID}/view`;
 export const RESUME_EMBED = `https://drive.google.com/file/d/${RESUME_ID}/preview`;
+
+// Cycled through in the hero, one at a time.
+export const interests = [
+  'real-time systems',
+  'graph neural networks',
+  'walk-forward backtests',
+  'multi-tenant backends',
+];
+
+// Count-up figures in the about section.
+export const stats: {
+  value: number;
+  decimals?: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+}[] = [
+  { value: 9.18, decimals: 2, label: 'CGPA, out of 10' },
+  { value: 253, label: 'NYC zones in one graph' },
+  { value: 10, prefix: '≤', suffix: '%', label: 'RMSE cut vs. ridge' },
+  { value: 0, label: 'bytes of future data leaked' },
+];
+
+// The scroll-lit statement in the about section. *Starred* words get the accent.
+export const statement =
+  'I’m drawn to systems where *correctness* is *hard* *to* *fake* — tenant isolation the ' +
+  'database enforces on every request, a forecast that has to beat its baseline, a backtest ' +
+  'that isn’t allowed to see the future. The interesting part is usually the part that ' +
+  '*resists* *shortcuts.*';

@@ -1,33 +1,49 @@
-import Background from './components/Background';
-import Cursor from './components/Cursor';
-import ClickRipple from './components/ClickRipple';
-import GlobalEffects from './components/GlobalEffects';
-import Nav from './components/Nav';
-import Footer from './components/Footer';
-import { ResumeProvider } from './components/ResumeContext';
-import About from './components/sections/About';
-import Projects from './components/sections/Projects';
-import Resume from './components/sections/Resume';
-import Contact from './components/sections/Contact';
+import { useEffect } from 'react';
+import About from './components/about/About';
+import Contact from './components/contact/Contact';
+import Hero from './components/hero/Hero';
+import CommandPalette from './components/layout/CommandPalette';
+import Cursor from './components/layout/Cursor';
+import Footer from './components/layout/Footer';
+import Nav from './components/layout/Nav';
+import ScrollProgress from './components/layout/ScrollProgress';
+import Toast from './components/layout/Toast';
+import Resume from './components/resume/Resume';
+import Marquee from './components/ui/Marquee';
+import Work from './components/work/Work';
+import { AppProvider } from './context/AppContext';
 
 export default function App() {
-  return (
-    <ResumeProvider>
-      <GlobalEffects />
-      <ClickRipple />
-      <Background />
-      <Cursor />
+  // the browser tries to jump to #hash before React has rendered the target —
+  // redo it once the sections exist, so deep links like /#work land properly
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const el = id && document.getElementById(id);
+    if (el) requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+  }, []);
 
-      <div className="page">
-        <Nav />
-        <main className="wrap">
-          <About />
-          <Projects />
-          <Resume />
-          <Contact />
-          <Footer />
-        </main>
-      </div>
-    </ResumeProvider>
+  return (
+    <AppProvider>
+      <a className="skip" href="#about">
+        Skip to content
+      </a>
+      <ScrollProgress />
+      <Nav />
+
+      <main>
+        <Hero />
+        <Marquee />
+        <About />
+        <Work />
+        <Resume />
+        <Contact />
+      </main>
+      <Footer />
+
+      <CommandPalette />
+      <Toast />
+      <Cursor />
+      <div className="grain" aria-hidden="true" />
+    </AppProvider>
   );
 }
