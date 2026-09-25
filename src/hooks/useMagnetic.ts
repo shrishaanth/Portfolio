@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { hasFinePointer, prefersReducedMotion } from '../lib/env';
 
 /** Pulls an element toward the pointer while hovered. Fine pointers only. */
-export function useMagnetic<T extends HTMLElement>(strength = 0.28) {
+export function useMagnetic<T extends HTMLElement>(strength = 0.15) {
   const ref = useRef<T | null>(null);
 
   useEffect(() => {

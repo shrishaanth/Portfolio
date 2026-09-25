@@ -3,7 +3,6 @@ import About from './components/about/About';
 import Contact from './components/contact/Contact';
 import Hero from './components/hero/Hero';
 import CommandPalette from './components/layout/CommandPalette';
-import Cursor from './components/layout/Cursor';
 import Footer from './components/layout/Footer';
 import Nav from './components/layout/Nav';
 import ScrollProgress from './components/layout/ScrollProgress';
@@ -42,8 +41,6 @@ export default function App() {
 
       <CommandPalette />
       <Toast />
-      <Cursor />
-      <div className="grain" aria-hidden="true" />
     </AppProvider>
   );
 }

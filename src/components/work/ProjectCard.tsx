@@ -80,13 +80,7 @@ export default function ProjectCard({
               </ul>
 
               <div className="proj__actions">
-                <a
-                  className="proj__src"
-                  href={project.source}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor="GitHub"
-                >
+                <a className="proj__src" href={project.source} target="_blank" rel="noreferrer">
                   View source
                   <span className="proj__src-icon">
                     <Icon name="arrowUpRight" size={15} />

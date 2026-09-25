@@ -53,20 +53,18 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 30%;
-  filter: grayscale(1) sepia(0.35) contrast(1.08) brightness(0.82);
+  filter: grayscale(1) contrast(1.04) brightness(0.9);
   transform: scale(1.08);
   transition:
     filter 0.9s var(--ease-out),
     transform 1.2s var(--ease-out);
 }
-/* ember wash that fades as the colour comes in */
+/* bottom shade so the name tag stays legible */
 .portrait::after {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, transparent 45%, rgba(11, 10, 9, 0.85)),
-    linear-gradient(135deg, rgba(255, 106, 43, 0.28), transparent 60%);
+  background: linear-gradient(180deg, transparent 50%, rgba(11, 12, 15, 0.85));
   mix-blend-mode: normal;
   transition: opacity 0.9s;
   pointer-events: none;
@@ -115,36 +113,6 @@
   font-size: 0.7rem;
   color: var(--ink-2);
 }
-.float-chip {
-  position: absolute;
-  z-index: 3;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line-2);
-  background: rgba(28, 25, 23, 0.85);
-  backdrop-filter: blur(10px);
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  color: var(--ink);
-  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.8);
-  animation: bob 6s var(--ease-in-out) infinite;
-}
-.float-chip--a {
-  top: 9%;
-  right: -18px;
-  color: var(--accent-2);
-}
-.float-chip--b {
-  top: 40%;
-  left: -22px;
-  animation-delay: -3s;
-}
-@keyframes bob {
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 /* ---------- terminal ---------- */
 .term {
   border-radius: var(--r);
@@ -262,12 +230,6 @@
 .scrolltext__w.is-lit {
   color: var(--ink);
 }
-.scrolltext__w.is-accent {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-}
 .scrolltext__w.is-accent.is-lit {
   color: var(--accent);
 }
@@ -376,10 +338,7 @@
   font-variant-numeric: tabular-nums;
 }
 .stat__affix {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--accent);
+  color: var(--muted);
 }
 .stat__k {
   font-size: var(--fs-sm);
@@ -408,12 +367,6 @@
   }
 }
 @media (max-width: 520px) {
-  .float-chip--a {
-    right: -6px;
-  }
-  .float-chip--b {
-    left: -6px;
-  }
   .term__row {
     grid-template-columns: 11ch 1fr;
   }

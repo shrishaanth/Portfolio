@@ -51,7 +51,7 @@ export const projects: ProjectData[] = [
       { cat: 'fw', label: 'Socket.IO' },
     ],
     source: 'https://github.com/shrishaanth/Taskify.io',
-    hue: '#ff6a2b',
+    hue: '#6e9bff',
   },
   {
     id: 'p2',
@@ -89,7 +89,7 @@ export const projects: ProjectData[] = [
       { cat: 'ml', label: 'Matplotlib' },
     ],
     source: 'https://github.com/shrishaanth/SurgeMap',
-    hue: '#a08bff',
+    hue: '#a590ff',
   },
   {
     id: 'p3',
@@ -123,7 +123,7 @@ export const projects: ProjectData[] = [
       { cat: 'ml', label: 'Plotly' },
     ],
     source: 'https://github.com/shrishaanth/Syntropy',
-    hue: '#3fd9a6',
+    hue: '#3fc7a8',
     gag: true,
   },
 ];

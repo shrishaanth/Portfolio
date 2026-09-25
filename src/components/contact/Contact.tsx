@@ -44,7 +44,7 @@ export default function Contact() {
         />
 
         <Reveal className="mailbig">
-          <button type="button" className="mailbig__btn" onClick={copyEmail} data-cursor="Copy">
+          <button type="button" className="mailbig__btn" onClick={copyEmail}>
             <span className="mailbig__addr">{profile.email}</span>
             <span className="mailbig__icon">
               <Icon name="copy" size={22} />

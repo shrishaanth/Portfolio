@@ -46,7 +46,7 @@ export default function Hero() {
           </p>
 
           <div className="hero__actions intro" style={{ '--d': '1000ms' } as React.CSSProperties}>
-            <MagneticLink href="#work" variant="primary" data-cursor="Scroll">
+            <MagneticLink href="#work" variant="primary">
               See selected work
               <Icon name="arrowDown" size={16} />
             </MagneticLink>

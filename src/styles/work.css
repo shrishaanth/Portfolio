@@ -475,14 +475,14 @@
 .gag__msg {
   font-family: var(--mono);
   font-size: 0.72rem;
-  color: #ff5a5f;
+  color: #f06b7a;
 }
 .proj.is-gag .d-future {
-  fill: rgba(255, 90, 95, 0.22);
-  stroke: #ff5a5f;
+  fill: rgba(240, 107, 122, 0.2);
+  stroke: #f06b7a;
 }
 .proj.is-gag .d-future-label {
-  fill: #ff5a5f;
+  fill: #f06b7a;
 }
 .proj.is-gag .proj__fig {
   animation: shake 0.45s var(--ease-out);

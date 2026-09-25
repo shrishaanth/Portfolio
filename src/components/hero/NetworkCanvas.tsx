@@ -17,8 +17,8 @@ interface Pulse {
 const LINK = 150;
 const LINK2 = LINK * LINK;
 const REACH = 220;
-const INK = '243, 238, 230';
-const EMBER = '255, 106, 43';
+const INK = '226, 232, 240';
+const ACCENT = '110, 155, 255';
 
 /**
  * A drifting node graph with "messages" passing along its edges — a nod to
@@ -127,7 +127,7 @@ export default function NetworkCanvas() {
           const near = Math.max(0, 1 - Math.hypot(mx, my) / REACH);
           ctx.strokeStyle =
             near > 0
-              ? `rgba(${EMBER}, ${(fade * (0.12 + near * 0.6)).toFixed(3)})`
+              ? `rgba(${ACCENT}, ${(fade * (0.12 + near * 0.6)).toFixed(3)})`
               : `rgba(${INK}, ${(fade * 0.11).toFixed(3)})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -138,7 +138,7 @@ export default function NetworkCanvas() {
 
       for (const n of nodes) {
         const near = Math.max(0, 1 - Math.hypot(n.x - mouse.x, n.y - mouse.y) / REACH);
-        ctx.fillStyle = near > 0 ? `rgba(${EMBER}, ${0.35 + near * 0.65})` : `rgba(${INK}, 0.32)`;
+        ctx.fillStyle = near > 0 ? `rgba(${ACCENT}, ${0.35 + near * 0.65})` : `rgba(${INK}, 0.32)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r + near * 1.6, 0, Math.PI * 2);
         ctx.fill();
@@ -152,8 +152,8 @@ export default function NetworkCanvas() {
         const y = a.y + (b.y - a.y) * p.t;
         const alpha = Math.sin(p.t * Math.PI);
         const g = ctx.createRadialGradient(x, y, 0, x, y, 9);
-        g.addColorStop(0, `rgba(${EMBER}, ${alpha})`);
-        g.addColorStop(1, `rgba(${EMBER}, 0)`);
+        g.addColorStop(0, `rgba(${ACCENT}, ${alpha})`);
+        g.addColorStop(1, `rgba(${ACCENT}, 0)`);
         ctx.fillStyle = g;
         ctx.fillRect(x - 9, y - 9, 18, 18);
       }

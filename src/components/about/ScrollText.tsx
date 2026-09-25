@@ -5,7 +5,7 @@ import { clamp } from '../../lib/scroll';
 
 /**
  * A statement whose words light up one by one as it scrolls through the
- * viewport. Words wrapped in *asterisks* get the serif-italic accent.
+ * viewport. Words wrapped in *asterisks* light up in the accent colour.
  */
 export default function ScrollText({ text }: { text: string }) {
   const ref = useRef<HTMLParagraphElement>(null);

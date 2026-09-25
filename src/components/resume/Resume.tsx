@@ -33,7 +33,6 @@ export default function Resume() {
               target="_blank"
               rel="noreferrer"
               onClick={openResume}
-              data-cursor="Open"
             >
               <div className="cv__paper" aria-hidden="true">
                 <span className="cv__line cv__line--h" />

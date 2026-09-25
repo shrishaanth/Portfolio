@@ -1,34 +1,34 @@
 /* ============================================================ *
- *  Design tokens — "Ember" : warm ink, cream type, one hot accent
+ *  Design tokens — "Slate" : cool ink, clean type, one calm blue accent
  * ============================================================ */
 :root {
   /* surfaces, darkest → lightest */
-  --bg: #0b0a09;
-  --bg-2: #100e0d;
-  --surface: #151311;
-  --surface-2: #1c1917;
-  --surface-3: #25211e;
+  --bg: #0b0c0f;
+  --bg-2: #0f1115;
+  --surface: #14161b;
+  --surface-2: #1a1d23;
+  --surface-3: #22262e;
 
   /* lines */
-  --line: rgba(243, 232, 216, 0.08);
-  --line-2: rgba(243, 232, 216, 0.14);
-  --line-3: rgba(243, 232, 216, 0.24);
+  --line: rgba(226, 232, 240, 0.07);
+  --line-2: rgba(226, 232, 240, 0.12);
+  --line-3: rgba(226, 232, 240, 0.2);
 
   /* type */
-  --ink: #f3eee6;
-  --ink-2: #cbc3b7;
-  --muted: #8f877c;
-  --faint: #5f5850;
+  --ink: #eceef2;
+  --ink-2: #bcc2cc;
+  --muted: #858c98;
+  --faint: #5a616c;
 
   /* accent + support hues (one per project / skill category) */
-  --accent: #ff6a2b;
-  --accent-2: #ffa06f;
-  --accent-ink: #1b0b03;
-  --accent-soft: rgba(255, 106, 43, 0.14);
-  --violet: #a08bff;
-  --mint: #3fd9a6;
-  --amber: #ffc857;
-  --sky: #6cc4ff;
+  --accent: #6e9bff;
+  --accent-2: #a8c2ff;
+  --accent-ink: #0a1330;
+  --accent-soft: rgba(110, 155, 255, 0.14);
+  --violet: #a590ff;
+  --mint: #3fc7a8;
+  --amber: #e3b95f;
+  --sky: #5ec4e8;
 
   /* type families */
   --display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;

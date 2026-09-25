@@ -10,14 +10,14 @@ navigation (no router), plain CSS with design tokens.
 - Plain global CSS split by area in `src/styles/` (`tokens.css` holds the palette, type
   scale, radii and easing curves). Global rather than CSS Modules because a lot of the
   styling keys off cross-component state classes (`.js-motion`, `.is-in`, `[data-cat]`, …)
-- Fonts: Inter Tight (display), Instrument Serif (italic accents), JetBrains Mono (labels)
+- Fonts: Inter Tight (display + body), JetBrains Mono (labels), Instrument Serif (pull quotes only)
 - ESLint + Prettier
 
 ## Design
 
-"Ember": warm near-black ink, cream type, a single hot accent (`--accent`), plus one hue per
-project and per skill category. Hierarchy runs giant name → numbered section heads
-(`01 — About`) → display titles with a serif-italic turn → body copy.
+"Slate": cool near-black surfaces, off-white type, one calm blue accent (`--accent`), plus a
+muted hue per project and per skill category. Hierarchy runs giant name → numbered section
+heads (`01 — About`) → two-tone display titles (ink, then muted grey) → body copy.
 
 Interactions, all of which respect `prefers-reduced-motion`:
 
@@ -25,9 +25,8 @@ Interactions, all of which respect `prefers-reduced-motion`:
   SurgeMap); it leans toward the cursor and pauses offscreen. Letter-by-letter name reveal,
   portrait pill, rotating interests.
 - **Chrome** — floating nav with a sliding pill that tracks hover/active and hides on scroll
-  down; scroll progress bar; custom cursor with contextual labels (fine pointers only);
-  command palette on `⌘K` / `Ctrl+K` / `/`; toasts; film grain.
-- **About** — tilting duotone portrait, a terminal that types its status, a statement whose
+  down; scroll progress bar; command palette on `⌘K` / `Ctrl+K` / `/`; toasts.
+- **About** — tilting greyscale portrait, a terminal that types its status, a statement whose
   words light up as you scroll, spotlight focus cards, count-up stats.
 - **Work** — project cards pin and stack as you scroll (the covered card recedes); diagrams
   draw in group by group with flowing edges; expandable back-story; the Syntropy
@@ -44,14 +43,14 @@ index.html              Vite entry (head meta, fonts, #root, pre-paint js-motion
 public/                 og.png, portrait.jpg, robots.txt — served as-is
 src/
   main.tsx              mounts <App/>, imports styles
-  App.tsx               page order + global overlays (palette, toast, cursor, grain)
+  App.tsx               page order + global overlays (palette, toast)
   context/AppContext    toast, command palette, résumé-opening, copy-email
   data/                 all copy — profile.ts, projects.ts, skills.ts
   hooks/                useInView, useScrollFrame, useActiveSection, useMagnetic,
                         usePointerVars, useCountUp, useLocalTime
   lib/                  env.ts (matchMedia helpers), scroll.ts (scrollToId, copyText, clamp)
   components/
-    layout/             Nav, Footer, Cursor, ScrollProgress, CommandPalette, Toast
+    layout/             Nav, Footer, ScrollProgress, CommandPalette, Toast
     ui/                 Reveal, SplitText, SectionHead, MagneticLink, Marquee, Icon
     hero/               Hero, NetworkCanvas, Rotator
     about/              About, PortraitCard, StatusTerminal, ScrollText, FocusCard, Stats
