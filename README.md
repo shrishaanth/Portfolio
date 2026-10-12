@@ -22,6 +22,11 @@ a board, demand pulsing across zones), in pink and orange light, with pale dust 
 the card. A scene can be swapped for a rendered image by setting `image` on the project — see
 [docs/imagery.md](docs/imagery.md).
 
+The hero, approach, about and contact sections each carry a render of glowing moss and
+flowers on black (`public/backdrops/`, placed by `<Backdrop>`): an island and a tree as
+objects on the right, and two full-width strips — one growing out of the approach cards, one
+closing the page above the footer.
+
 The Stack section is a layered diagram (frontend at the top, languages at the bottom, tools
 in a side rail). One project is traced through it at a time: the skills it uses light up and
 glowing links join them layer to layer. Which skills light up is derived from each project's
@@ -37,7 +42,7 @@ evaluation docs**, so update both together.
 
 ```
 index.html              Vite entry (head meta, fonts, #root, pre-paint js-motion flag)
-public/                 og.png, robots.txt, projects/ (optional renders) — served as-is
+public/                 og.png, robots.txt, backdrops/ (section renders) — served as-is
 src/
   main.tsx              mounts <App/>, imports styles
   App.tsx               page order + overlays (command menu, toast)
@@ -48,7 +53,7 @@ src/
   lib/                  env.ts (matchMedia helpers), scroll.ts (scrollToId, copyText, clamp)
   components/
     layout/             Nav, Footer, CommandPalette, Toast, ResumeViewer
-    ui/                 Reveal, SectionHead, Icon
+    ui/                 Reveal, SectionHead, Backdrop, Icon
     visuals/            scenes.ts (the canvas scenes), paint.ts, SceneCanvas, ProjectVisual
     sections/           Hero, Work, Approach, About, Stack, Contact
   styles/               tokens, base, layout, sections

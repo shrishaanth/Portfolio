@@ -1,6 +1,7 @@
 import { useApp } from '../../context/AppContext';
 import { profile } from '../../data/profile';
 import { useLocalTime } from '../../hooks/useLocalTime';
+import Backdrop from '../ui/Backdrop';
 import Icon, { type IconName } from '../ui/Icon';
 import Reveal from '../ui/Reveal';
 import ResumeViewer from '../layout/ResumeViewer';
@@ -30,6 +31,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section contact dots">
+      <Backdrop name="contact" />
       <div className="wrap">
         <Reveal className="contact__status" variant="fade">
           <span className="live">

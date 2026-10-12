@@ -1,16 +1,50 @@
-# Project imagery
+# Imagery
 
-Each project card shows a picture in its top-right corner. By default that picture is an
-animated scene drawn in code (`src/components/visuals/scenes.ts`). Any of them can be replaced
-by a rendered image without touching the layout.
+The site uses two kinds of picture: rendered images behind sections, and animated scenes
+drawn in code (`src/components/visuals/scenes.ts`) inside the project cards.
 
-## Current state
+## Section backdrops
 
-The cards use the animated scenes; no renders are in use. Four renders were generated and
-tried (they are kept in `design/renders/`, as full-size PNG and web-ready WebP) and can be
-switched back on as described below.
+Four renders of glowing moss, ferns and flowers on black, one per section:
 
-## Swapping in a render
+| Section  | File                             | Kind   | Placement                                   |
+| -------- | -------------------------------- | ------ | ------------------------------------------- |
+| Hero     | `public/backdrops/hero.webp`     | object | floating island, right of the headline      |
+| Approach | `public/backdrops/approach.webp` | strip  | full width, growing out of the three cards  |
+| About    | `public/backdrops/about.webp`    | object | tree, right of the heading                  |
+| Contact  | `public/backdrops/contact.webp`  | strip  | full width along the bottom of the section  |
+
+Each is placed by `<Backdrop name="…" />` in its section and positioned by the
+`.backdrop--<name>` rule in `src/styles/sections.css`. The images are blended in "screen"
+mode, so their black background disappears and only the light shows.
+
+**Replacing one.** Put the new full-size image in `design/renders/`, crop away the empty black
+around the subject, export as WebP (quality ~82) over the file in `public/backdrops/`, and
+update its pixel size in `SIZES` at the top of `src/components/ui/Backdrop.tsx`.
+
+**Prompts used** (each followed by the shared style below):
+
+- Hero, 16:9 — a single small floating island of dark rock seen from the side, overgrown with
+  glowing moss and trailing vines, in the right third of the frame, the rest empty black
+- Approach, 3:1 — a long panoramic strip of overgrown terrain seen from the side, mossy mounds
+  and peaks with wildflowers along the top, full width, a flat straight bottom edge
+- About, 16:9 — a single glowing tree with a twisting trunk and a wide canopy of blossoms,
+  roots trailing below, in the right third of the frame, the rest empty black
+- Contact, 3:1 — a low distant horizon of glowing grasses and wildflowers, sparse and
+  delicate, full width along the very bottom of the frame
+
+Shared style: glowing bioluminescent moss, ferns and tiny wildflowers, colours shifting from
+moss green through warm orange to hot pink, fine detailed foliage, macro 3D render, soft
+volumetric glow, floating in a pure #000000 black void, no ground plane, no sky, no text.
+
+The full-size PNG originals are in `design/renders/` (not in git, not shipped).
+
+## Project cards
+
+The project cards use animated canvas scenes rather than renders. A card can be switched to a
+render as described below.
+
+## Using a render in a project card
 
 1. Save the image in `public/projects/`, e.g. `public/projects/axon.webp`.
 2. In `src/data/projects.ts`, add `image` to that project:

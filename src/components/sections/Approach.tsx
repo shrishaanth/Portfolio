@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { approach } from '../../data/profile';
 import { useInView } from '../../hooks/useInView';
 import { prefersReducedMotion } from '../../lib/env';
+import Backdrop from '../ui/Backdrop';
 import SectionHead from '../ui/SectionHead';
 
 const STEP_MS = 3600;
@@ -26,6 +27,8 @@ export default function Approach() {
     <section id="approach" className="section">
       <div className="wrap">
         <SectionHead label="Approach" lead="How I work," tail="in three steps." />
+
+        <Backdrop name="approach" />
 
         <ol
           className="steps"

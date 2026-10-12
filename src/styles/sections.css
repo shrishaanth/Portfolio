@@ -35,6 +35,13 @@
   flex-wrap: wrap;
   gap: 12px;
 }
+.hero__actions .pill--ghost {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+}
+.hero__actions .pill--ghost:hover {
+  background: transparent;
+}
 
 .stats {
   display: flex;
@@ -623,6 +630,108 @@ a.channel:hover .channel__v {
 a.channel:hover .channel__go {
   color: var(--accent);
   transform: translate(2px, -2px);
+}
+
+/* ---------- backdrops: renders behind or between a section's content ---------- */
+.section {
+  isolation: isolate;
+  overflow-x: clip;
+}
+.hero {
+  overflow-x: clip;
+}
+.backdrop {
+  pointer-events: none;
+  /* screen: the render's black drops out, leaving only the light */
+  mix-blend-mode: screen;
+}
+.backdrop img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* objects: a single subject floating in the empty space on the right */
+.backdrop--hero,
+.backdrop--about {
+  position: absolute;
+  z-index: -1;
+}
+.backdrop--hero img,
+.backdrop--about img {
+  animation: float 9s ease-in-out infinite alternate;
+}
+@keyframes float {
+  to {
+    transform: translateY(-14px);
+  }
+}
+.backdrop--hero {
+  top: 47%;
+  right: max(3vw, calc((100vw - var(--maxw)) / 2 + 3vw));
+  width: min(34vw, 500px);
+  transform: translateY(-50%);
+}
+.js-motion .backdrop--hero {
+  animation: backdrop-in 1.6s 0.3s var(--ease-out) backwards;
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+.backdrop--about {
+  top: clamp(20px, 2.6vw, 44px);
+  right: max(5vw, calc((100vw - var(--maxw)) / 2 + 5vw));
+  width: min(29vw, 400px);
+}
+
+/* strips: a wide band of landscape */
+.backdrop--approach {
+  position: relative;
+  z-index: 1;
+  /* pulled up toward the heading, and down so its roots hang over the cards' top edge */
+  margin: calc(clamp(48px, 6vw, 88px) * -0.75) 0 -2.4%;
+  overflow: hidden;
+}
+.backdrop--contact {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+.contact {
+  padding-bottom: calc(var(--section-y) + clamp(40px, 7vw, 110px));
+}
+
+@media (max-width: 900px) {
+  /* text runs the full width here, so objects sit behind it, dimmed */
+  .backdrop--hero,
+  .backdrop--about {
+    opacity: 0.5;
+    transform: none;
+  }
+  .backdrop--hero {
+    top: 64px;
+    right: -12vw;
+    width: 66vw;
+  }
+  .backdrop--about {
+    top: 12px;
+    right: -6vw;
+    width: 48vw;
+  }
+  /* a strip this narrow would be a sliver: show its left part at twice the size */
+  .backdrop--approach img,
+  .backdrop--contact img {
+    width: 210%;
+    max-width: none;
+  }
+  .backdrop--approach {
+    margin-bottom: -5%;
+  }
 }
 
 @media (max-width: 960px) {

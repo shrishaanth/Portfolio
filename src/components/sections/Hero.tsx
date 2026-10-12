@@ -2,6 +2,7 @@ import { useApp } from '../../context/AppContext';
 import { profile, stats } from '../../data/profile';
 import { useCountUp } from '../../hooks/useCountUp';
 import { useInView } from '../../hooks/useInView';
+import Backdrop from '../ui/Backdrop';
 import Icon from '../ui/Icon';
 
 function Stat({ s, start, i }: { s: (typeof stats)[number]; start: boolean; i: number }) {
@@ -24,6 +25,7 @@ export default function Hero() {
 
   return (
     <section id="top" className="hero gridlines">
+      <Backdrop name="hero" eager />
       <div className="wrap hero__body">
         <p className="label intro" style={{ '--d': '100ms' } as React.CSSProperties}>
           <span className="label__rule" aria-hidden="true" />
