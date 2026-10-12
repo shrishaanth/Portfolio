@@ -25,10 +25,9 @@ export default function Approach() {
 
   return (
     <section id="approach" className="section">
+      <Backdrop name="tiles" />
       <div className="wrap">
         <SectionHead label="Approach" lead="How I work," tail="in three steps." />
-
-        <Backdrop name="approach" />
 
         <ol
           className="steps"

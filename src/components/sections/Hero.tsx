@@ -25,7 +25,7 @@ export default function Hero() {
 
   return (
     <section id="top" className="hero gridlines">
-      <Backdrop name="hero" eager />
+      <Backdrop name="branches" eager />
       <div className="wrap hero__body">
         <p className="label intro" style={{ '--d': '100ms' } as React.CSSProperties}>
           <span className="label__rule" aria-hidden="true" />

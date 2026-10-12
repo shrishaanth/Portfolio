@@ -5,37 +5,19 @@ drawn in code (`src/components/visuals/scenes.ts`) inside the project cards.
 
 ## Section backdrops
 
-Four renders of glowing moss, ferns and flowers on black, one per section:
+Four renders sit behind sections, in the empty space on the right, fading into black:
 
-| Section  | File                             | Kind   | Placement                                   |
-| -------- | -------------------------------- | ------ | ------------------------------------------- |
-| Hero     | `public/backdrops/hero.webp`     | object | floating island, right of the headline      |
-| Approach | `public/backdrops/approach.webp` | strip  | full width, growing out of the three cards  |
-| About    | `public/backdrops/about.webp`    | object | tree, right of the heading                  |
-| Contact  | `public/backdrops/contact.webp`  | strip  | full width along the bottom of the section  |
+| Section  | File                            | Shows                         |
+| -------- | ------------------------------- | ----------------------------- |
+| Hero     | `public/backdrops/branches.webp` | filaments fanning from a seed |
+| Approach | `public/backdrops/tiles.webp`    | glass tiles, one lifted       |
+| About    | `public/backdrops/lattice.webp`  | a long lattice of nodes       |
+| Contact  | `public/backdrops/island.webp`   | an island with one lit path   |
 
-Each is placed by `<Backdrop name="…" />` in its section and positioned by the
-`.backdrop--<name>` rule in `src/styles/sections.css`. The images are blended in "screen"
-mode, so their black background disappears and only the light shows.
-
-**Replacing one.** Put the new full-size image in `design/renders/`, crop away the empty black
-around the subject, export as WebP (quality ~82) over the file in `public/backdrops/`, and
-update its pixel size in `SIZES` at the top of `src/components/ui/Backdrop.tsx`.
-
-**Prompts used** (each followed by the shared style below):
-
-- Hero, 16:9 — a single small floating island of dark rock seen from the side, overgrown with
-  glowing moss and trailing vines, in the right third of the frame, the rest empty black
-- Approach, 3:1 — a long panoramic strip of overgrown terrain seen from the side, mossy mounds
-  and peaks with wildflowers along the top, full width, a flat straight bottom edge
-- About, 16:9 — a single glowing tree with a twisting trunk and a wide canopy of blossoms,
-  roots trailing below, in the right third of the frame, the rest empty black
-- Contact, 3:1 — a low distant horizon of glowing grasses and wildflowers, sparse and
-  delicate, full width along the very bottom of the frame
-
-Shared style: glowing bioluminescent moss, ferns and tiny wildflowers, colours shifting from
-moss green through warm orange to hot pink, fine detailed foliage, macro 3D render, soft
-volumetric glow, floating in a pure #000000 black void, no ground plane, no sky, no text.
+Each is placed by `<Backdrop name="…" />` at the top of the section, and positioned by the
+`.backdrop--<name>` rule in `src/styles/sections.css`. To change an image, replace the file
+(keep the name). To move or resize one, edit its rule. To remove one, delete the `<Backdrop>`
+line. On small screens they sit behind the text at reduced opacity.
 
 The full-size PNG originals are in `design/renders/` (not in git, not shipped).
 

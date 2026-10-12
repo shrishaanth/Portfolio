@@ -35,13 +35,6 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.hero__actions .pill--ghost {
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-}
-.hero__actions .pill--ghost:hover {
-  background: transparent;
-}
 
 .stats {
   display: flex;
@@ -520,6 +513,131 @@
   letter-spacing: 0.08em;
 }
 
+/* ---------- stack: every technology as a tile ---------- */
+.grid-stack {
+  margin-top: clamp(64px, 8vw, 120px);
+}
+.grid-stack .label {
+  margin-bottom: 28px;
+}
+.grid-stack__count {
+  margin-left: auto;
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  gap: 16px;
+}
+.tile {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+  padding: 26px 28px 24px;
+  border: 1px solid var(--line);
+  isolation: isolate;
+  transition: border-color 0.35s;
+}
+/* a soft light that follows the pointer inside the tile */
+.tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    320px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.11),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+/* a white line that runs along the bottom edge, left to right, on hover */
+.tile::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+}
+.tile:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.tile:hover::after {
+  transform: scaleX(1);
+}
+.tile:hover::before {
+  opacity: 1;
+}
+.tile__tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 3px 9px;
+  background: var(--surface-3);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  transition:
+    background 0.35s,
+    color 0.35s;
+}
+.tile:hover .tile__tag {
+  background: var(--ink);
+  color: var(--bg);
+}
+.tile__icon {
+  display: block;
+  height: 30px;
+  margin-bottom: auto;
+  color: var(--dim);
+  transition:
+    color 0.35s,
+    transform 0.5s var(--ease-out);
+}
+.tile:hover .tile__icon {
+  color: var(--ink);
+  transform: translateY(-2px);
+}
+.tile__name {
+  margin-top: 36px;
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.tile__used {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+.tile:hover .tile__used {
+  color: var(--ink-2);
+}
+@media (max-width: 560px) {
+  .tiles {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .tile {
+    min-height: 160px;
+    padding: 20px 18px 18px;
+  }
+  .tile__name {
+    margin-top: 26px;
+  }
+  .grid-stack__count {
+    display: none;
+  }
+}
+
 /* ---------- contact ---------- */
 .contact {
   border-top: 1px solid var(--line);
@@ -632,7 +750,7 @@ a.channel:hover .channel__go {
   transform: translate(2px, -2px);
 }
 
-/* ---------- backdrops: renders behind or between a section's content ---------- */
+/* ---------- backdrops: a render behind a section, in the empty space on its right ---------- */
 .section {
   isolation: isolate;
   overflow-x: clip;
@@ -641,96 +759,61 @@ a.channel:hover .channel__go {
   overflow-x: clip;
 }
 .backdrop {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: min(58vw, 900px);
+  aspect-ratio: 16 / 9;
   pointer-events: none;
   /* screen: the render's black drops out, leaving only the light */
   mix-blend-mode: screen;
+  opacity: 0.9;
+  /* soften the left and bottom, where the picture meets text */
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent, #000 34%), linear-gradient(180deg, #000 58%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent, #000 34%), linear-gradient(180deg, #000 58%, transparent);
+  mask-composite: intersect;
 }
 .backdrop img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  transform-origin: 70% 40%;
+  animation: render-drift 22s ease-in-out infinite alternate;
 }
-
-/* objects: a single subject floating in the empty space on the right */
-.backdrop--hero,
-.backdrop--about {
-  position: absolute;
-  z-index: -1;
+.backdrop--branches {
+  top: clamp(90px, 14vh, 170px);
+  right: -2%;
+  width: min(66vw, 1040px);
 }
-.backdrop--hero img,
-.backdrop--about img {
-  animation: float 9s ease-in-out infinite alternate;
+.backdrop--tiles {
+  top: clamp(8px, 2vw, 40px);
+  width: min(54vw, 820px);
 }
-@keyframes float {
-  to {
-    transform: translateY(-14px);
-  }
+.backdrop--lattice {
+  top: clamp(24px, 3vw, 56px);
+  width: min(56vw, 860px);
 }
-.backdrop--hero {
-  top: 47%;
-  right: max(3vw, calc((100vw - var(--maxw)) / 2 + 3vw));
-  width: min(34vw, 500px);
-  transform: translateY(-50%);
-}
-.js-motion .backdrop--hero {
-  animation: backdrop-in 1.6s 0.3s var(--ease-out) backwards;
-}
-@keyframes backdrop-in {
-  from {
-    opacity: 0;
-  }
-}
-.backdrop--about {
-  top: clamp(20px, 2.6vw, 44px);
-  right: max(5vw, calc((100vw - var(--maxw)) / 2 + 5vw));
-  width: min(29vw, 400px);
-}
-
-/* strips: a wide band of landscape */
-.backdrop--approach {
-  position: relative;
-  z-index: 1;
-  /* pulled up toward the heading, and down so its roots hang over the cards' top edge */
-  margin: calc(clamp(48px, 6vw, 88px) * -0.75) 0 -2.4%;
-  overflow: hidden;
-}
-.backdrop--contact {
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-}
-.contact {
-  padding-bottom: calc(var(--section-y) + clamp(40px, 7vw, 110px));
+.backdrop--island {
+  top: clamp(40px, 5vw, 88px);
+  right: 2%;
+  width: min(48vw, 720px);
 }
 
 @media (max-width: 900px) {
-  /* text runs the full width here, so objects sit behind it, dimmed */
-  .backdrop--hero,
-  .backdrop--about {
-    opacity: 0.5;
-    transform: none;
+  /* text runs the full width here, so the render sits behind it, dimmed */
+  .backdrop {
+    width: 118vw;
+    right: -26vw;
+    opacity: 0.42;
   }
-  .backdrop--hero {
-    top: 64px;
-    right: -12vw;
-    width: 66vw;
-  }
-  .backdrop--about {
-    top: 12px;
-    right: -6vw;
-    width: 48vw;
-  }
-  /* a strip this narrow would be a sliver: show its left part at twice the size */
-  .backdrop--approach img,
-  .backdrop--contact img {
-    width: 210%;
-    max-width: none;
-  }
-  .backdrop--approach {
-    margin-bottom: -5%;
+  .backdrop--branches {
+    top: 70px;
   }
 }
 

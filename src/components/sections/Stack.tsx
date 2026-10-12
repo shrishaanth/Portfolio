@@ -4,6 +4,7 @@ import { layers, skillKey, tooling } from '../../data/skills';
 import { useInView } from '../../hooks/useInView';
 import { prefersReducedMotion } from '../../lib/env';
 import SectionHead from '../ui/SectionHead';
+import StackGrid from './StackGrid';
 
 const AUTO_MS = 4200;
 
@@ -167,6 +168,8 @@ export default function Stack() {
             <p className="arch__note mono">Across every layer</p>
           </div>
         </div>
+
+        <StackGrid />
 
         <p className="sr-only" aria-live="polite">
           {projects[active].name} uses {projects[active].stack.join(', ')}.

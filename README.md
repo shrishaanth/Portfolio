@@ -5,7 +5,7 @@ navigation (no router), plain CSS with design tokens.
 
 ## Stack
 
-- Vite + React 18 + TypeScript — no UI or animation libraries
+- Vite + React 18 + TypeScript — no UI or animation libraries; `simple-icons` for tech marks
 - Plain global CSS in `src/styles/` (`tokens.css` holds the palette, type scale and easing)
 - Fonts: Geist (everything) and Geist Mono (labels)
 - ESLint + Prettier
@@ -22,15 +22,17 @@ a board, demand pulsing across zones), in pink and orange light, with pale dust 
 the card. A scene can be swapped for a rendered image by setting `image` on the project — see
 [docs/imagery.md](docs/imagery.md).
 
-The hero, approach, about and contact sections each carry a render of glowing moss and
-flowers on black (`public/backdrops/`, placed by `<Backdrop>`): an island and a tree as
-objects on the right, and two full-width strips — one growing out of the approach cards, one
-closing the page above the footer.
+The hero, approach, about and contact sections each have a rendered image behind them, in
+the empty space on the right (`public/backdrops/`, placed by `<Backdrop>`).
 
 The Stack section is a layered diagram (frontend at the top, languages at the bottom, tools
 in a side rail). One project is traced through it at a time: the skills it uses light up and
 glowing links join them layer to layer. Which skills light up is derived from each project's
 `stack` in `projects.ts`, matched against `skills.ts`, so there is nothing to keep in sync by hand.
+
+Below the diagram, a grid shows every technology as a tile: its mark, name, a category tag
+and the featured projects that use it. Marks come from `simple-icons` (CC0) via
+`src/components/ui/TechIcon.tsx`; add a skill to `skills.ts` and map its mark there.
 
 ## Content
 

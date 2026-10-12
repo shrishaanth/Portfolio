@@ -31,7 +31,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section contact dots">
-      <Backdrop name="contact" />
+      <Backdrop name="island" />
       <div className="wrap">
         <Reveal className="contact__status" variant="fade">
           <span className="live">

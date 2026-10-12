@@ -6,7 +6,7 @@ import SectionHead from '../ui/SectionHead';
 export default function About() {
   return (
     <section id="about" className="section">
-      <Backdrop name="about" />
+      <Backdrop name="lattice" />
       <div className="wrap">
         <SectionHead label="About" lead="Third-year student," tail="Software Systems." />
 
