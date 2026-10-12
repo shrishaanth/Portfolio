@@ -84,9 +84,7 @@ export const education = [
   },
 ];
 
-// Résumé is hosted off-repo (Google Drive, "anyone with the link") — deliberately
-// not committed here. Swap RESUME_ID for a new file's id to update the link;
-// with Drive's "Manage versions" you can replace the PDF and keep the same id.
-export const RESUME_ID = '1Gpt30T3k-4t7LPenap52BrzmcGAnOGeZ';
-export const RESUME_HREF = `https://drive.google.com/file/d/${RESUME_ID}/view`;
-export const RESUME_EMBED = `https://drive.google.com/file/d/${RESUME_ID}/preview`;
+// The résumé is public/resume.pdf. Don't edit that file here: it is copied in
+// automatically from the private Resume repo whenever Resume.pdf changes there
+// (see the README). The site just serves whatever is current.
+export const RESUME_HREF = '/resume.pdf';

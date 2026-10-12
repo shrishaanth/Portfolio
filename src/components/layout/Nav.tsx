@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { sections } from '../../data/nav';
 import { useActiveSection } from '../../hooks/useActiveSection';
 import { useScrollFrame } from '../../hooks/useScrollFrame';
+import Logo from '../ui/Logo';
 
 const IDS = sections.map((s) => s.id);
 
@@ -18,7 +19,10 @@ export default function Nav() {
     <header className={scrolled ? 'nav is-scrolled' : 'nav'}>
       <div className="nav__bar">
         <a className="nav__brand" href="#top" aria-label="Shrishaanth U — back to top">
-          SHRISHAANTH <span>U</span>
+          <Logo height={26} />
+          <span className="nav__word">
+            SHRISHAANTH <span>U</span>
+          </span>
         </a>
 
         <nav className="nav__links" aria-label="Primary">

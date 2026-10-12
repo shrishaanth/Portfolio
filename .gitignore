@@ -23,8 +23,7 @@ pnpm-debug.log*
 .vercel
 .netlify
 
-# résumé is hosted off-repo — never commit it here
-Shrishaanth-U-Resume.pdf
+# public/resume.pdf IS tracked: it is synced in from the Resume repo by a workflow
 
 # full-size render originals — large, and not used by the site
 design/renders/*.png

@@ -41,14 +41,26 @@
 
 .nav__brand {
   display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+}
+.nav__brand svg {
+  flex: none;
+  transition: transform 0.5s var(--ease-out);
+}
+.nav__brand:hover svg {
+  transform: translateY(-2px);
+}
+.nav__word {
+  display: inline-flex;
   align-items: flex-start;
   gap: 6px;
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: -0.03em;
-  color: var(--ink);
 }
-.nav__brand span {
+.nav__word span {
   margin-top: 4px;
   font-family: var(--mono);
   font-size: 0.6rem;
@@ -123,8 +135,11 @@
   .nav.is-scrolled .nav__bar {
     padding: 0 10px 0 18px;
   }
-  .nav__brand {
+  .nav__word {
     font-size: 1.1rem;
+  }
+  .nav__brand {
+    gap: 9px;
   }
 }
 

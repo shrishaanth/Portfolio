@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { RESUME_EMBED } from '../../data/profile';
 import { prefersReducedMotion } from '../../lib/env';
 import Icon from '../ui/Icon';
 
@@ -28,14 +27,14 @@ export default function ResumeViewer() {
         </span>
         <span className="viewer__actions">
           <a href={resumeHref} target="_blank" rel="noreferrer">
-            Open in Drive <Icon name="arrowUpRight" size={13} />
+            Open in a new tab <Icon name="arrowUpRight" size={13} />
           </a>
           <button type="button" onClick={closeViewer} aria-label="Close résumé">
             <Icon name="close" size={15} />
           </button>
         </span>
       </div>
-      {mounted && <iframe title="Résumé — Shrishaanth U" src={RESUME_EMBED} />}
+      {mounted && <iframe title="Résumé — Shrishaanth U" src={resumeHref} />}
     </div>
   );
 }

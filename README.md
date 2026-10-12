@@ -44,7 +44,7 @@ evaluation docs**, so update both together.
 
 ```
 index.html              Vite entry (head meta, fonts, #root, pre-paint js-motion flag)
-public/                 og.png, robots.txt, backdrops/ (section renders) — served as-is
+public/                 logo.svg, favicon.svg, og.png, robots.txt, backdrops/ — served as-is
 src/
   main.tsx              mounts <App/>, imports styles
   App.tsx               page order + overlays (command menu, toast)
@@ -55,7 +55,7 @@ src/
   lib/                  env.ts (matchMedia helpers), scroll.ts (scrollToId, copyText, clamp)
   components/
     layout/             Nav, Footer, CommandPalette, Toast, ResumeViewer
-    ui/                 Reveal, SectionHead, Backdrop, Icon
+    ui/                 Reveal, SectionHead, Backdrop, Logo, TechIcon, Icon
     visuals/            scenes.ts (the canvas scenes), paint.ts, SceneCanvas, ProjectVisual
     sections/           Hero, Work, Approach, About, Stack, Contact
   styles/               tokens, base, layout, sections
@@ -75,11 +75,15 @@ npm run format:check
 
 ## Résumé
 
-The résumé PDF is **not** committed to this repo — it's hosted on Google Drive
-("anyone with the link") and referenced by `RESUME_ID` in
-[`src/data/profile.ts`](src/data/profile.ts). To update it, use Drive's
-"Manage versions" to replace the file in place (keeps the same id, so no code
-change needed), or swap `RESUME_ID` for a new file's id.
+The site serves `public/resume.pdf`. **Don't update that file by hand.** The source of truth
+is `Resume.pdf` in the private `shrishaanth/Resume` repo: a workflow there
+(`.github/workflows/publish-to-portfolio.yml`) runs whenever that file changes, copies it to
+`public/resume.pdf` in this repo and pushes the commit, which redeploys the site.
+
+That workflow needs one secret in the Resume repo, `PORTFOLIO_TOKEN`: a fine-grained personal
+access token limited to this repository with **Contents: Read and write**. If the token
+expires, the workflow fails with a message saying so; create a new one and update the secret.
+After a sync, run `git pull` here before your next local change.
 
 ## Deploy
 

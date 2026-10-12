@@ -3,6 +3,7 @@ import { sections } from '../../data/nav';
 import { profile } from '../../data/profile';
 import { scrollToId } from '../../lib/scroll';
 import Icon from '../ui/Icon';
+import Logo from '../ui/Logo';
 
 export default function Footer() {
   const { setPaletteOpen } = useApp();
@@ -12,7 +13,10 @@ export default function Footer() {
       <div className="wrap foot__grid">
         <div>
           <a className="nav__brand" href="#top">
-            SHRISHAANTH <span>U</span>
+            <Logo height={26} />
+            <span className="nav__word">
+              SHRISHAANTH <span>U</span>
+            </span>
           </a>
           <p className="foot__note">{profile.role}. Based in Coimbatore, India.</p>
         </div>
