@@ -1,108 +1,60 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { sections } from '../../data/nav';
 import { useActiveSection } from '../../hooks/useActiveSection';
 import { useScrollFrame } from '../../hooks/useScrollFrame';
-import Icon from '../ui/Icon';
 
-const LINKS = [
-  { id: 'about', label: 'About' },
-  { id: 'work', label: 'Work' },
-  { id: 'resume', label: 'Résumé' },
-  { id: 'contact', label: 'Contact' },
-] as const;
-const IDS = LINKS.map((l) => l.id);
+const IDS = sections.map((s) => s.id);
 
+/** Full-width bar at the top of the page that tightens into a bordered, floating bar on scroll. */
 export default function Nav() {
-  const { setPaletteOpen } = useApp();
+  const { resumeHref, openResume, setPaletteOpen } = useApp();
   const active = useActiveSection(IDS);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const lastY = useRef(0);
-  const trackRef = useRef<HTMLElement>(null);
-  const pillRef = useRef<HTMLSpanElement>(null);
 
-  // hide on the way down, return on the way up
-  useScrollFrame(() => {
-    const y = window.scrollY;
-    setScrolled(y > 24);
-    if (Math.abs(y - lastY.current) > 6) {
-      setHidden(y > lastY.current && y > 240);
-      lastY.current = y;
-    }
-  });
-
-  // the pill tracks the hovered link, falling back to the active one
-  const target = hovered ?? active;
-  const placePill = useCallback(() => {
-    const pill = pillRef.current;
-    const link = target
-      ? trackRef.current?.querySelector<HTMLElement>(`[data-id="${target}"]`)
-      : null;
-    if (!pill) return;
-    if (!link) {
-      pill.style.opacity = '0';
-      return;
-    }
-    pill.style.opacity = '1';
-    pill.style.width = `${link.offsetWidth}px`;
-    pill.style.transform = `translateX(${link.offsetLeft}px)`;
-  }, [target]);
-
-  useLayoutEffect(() => {
-    placePill();
-    window.addEventListener('resize', placePill);
-    document.fonts?.ready.then(placePill);
-    return () => window.removeEventListener('resize', placePill);
-  }, [placePill]);
+  useScrollFrame(() => setScrolled(window.scrollY > 40));
 
   return (
-    <header
-      className={['nav', hidden && 'is-hidden', scrolled && 'is-scrolled']
-        .filter(Boolean)
-        .join(' ')}
-    >
-      <a className="nav__logo" href="#top" aria-label="Shrishaanth U — back to top">
-        <span className="nav__mono">SU</span>
-        <span className="nav__dot" />
-      </a>
-
-      <nav aria-label="Primary" className="nav__track" ref={trackRef}>
-        <span className="nav__pill" ref={pillRef} aria-hidden="true" />
-        <ul className="nav__links" onMouseLeave={() => setHovered(null)}>
-          {LINKS.map((l, i) => (
-            <li key={l.id}>
-              <a
-                href={`#${l.id}`}
-                data-id={l.id}
-                className={active === l.id ? 'is-active' : undefined}
-                aria-current={active === l.id ? 'location' : undefined}
-                onMouseEnter={() => setHovered(l.id)}
-                onFocus={() => setHovered(l.id)}
-                onBlur={() => setHovered(null)}
-              >
-                <span className="nav__num">0{i + 1}</span>
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="nav__end">
-        <button
-          type="button"
-          className="nav__cmd"
-          onClick={() => setPaletteOpen(true)}
-          aria-label="Open command menu"
-        >
-          <Icon name="search" size={14} />
-          <kbd>⌘K</kbd>
-        </button>
-        <a className="nav__cta" href="#contact">
-          <span className="nav__status" aria-hidden="true" />
-          Let’s talk
+    <header className={scrolled ? 'nav is-scrolled' : 'nav'}>
+      <div className="nav__bar">
+        <a className="nav__brand" href="#top" aria-label="Shrishaanth U — back to top">
+          SHRISHAANTH <span>U</span>
         </a>
+
+        <nav className="nav__links" aria-label="Primary">
+          <ul>
+            {sections.map((s) => (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
+                  className={active === s.id ? 'is-active' : undefined}
+                  aria-current={active === s.id ? 'location' : undefined}
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="nav__end">
+          <a
+            className="nav__text"
+            href={resumeHref}
+            target="_blank"
+            rel="noreferrer"
+            onClick={openResume}
+          >
+            Résumé
+          </a>
+          {/* on small screens the section links collapse into the command menu */}
+          <button type="button" className="nav__menu" onClick={() => setPaletteOpen(true)}>
+            Menu
+          </button>
+          <a className="pill pill--sm" href="#contact">
+            Get in touch
+          </a>
+        </div>
       </div>
     </header>
   );

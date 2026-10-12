@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { sections } from '../../data/nav';
 import { profile } from '../../data/profile';
 import { projects } from '../../data/projects';
 import { scrollToId } from '../../lib/scroll';
@@ -27,34 +28,13 @@ export default function CommandPalette() {
   const commands = useMemo<Command[]>(
     () => [
       { id: 'top', group: 'Navigate', label: 'Home', icon: 'hash', run: () => scrollToId('top') },
-      {
-        id: 'about',
+      ...sections.map<Command>((sec) => ({
+        id: sec.id,
         group: 'Navigate',
-        label: 'About',
+        label: sec.label,
         icon: 'hash',
-        run: () => scrollToId('about'),
-      },
-      {
-        id: 'work',
-        group: 'Navigate',
-        label: 'Selected work',
-        icon: 'hash',
-        run: () => scrollToId('work'),
-      },
-      {
-        id: 'resume',
-        group: 'Navigate',
-        label: 'Résumé & stack',
-        icon: 'hash',
-        run: () => scrollToId('resume'),
-      },
-      {
-        id: 'contact',
-        group: 'Navigate',
-        label: 'Contact',
-        icon: 'hash',
-        run: () => scrollToId('contact'),
-      },
+        run: () => scrollToId(sec.id),
+      })),
       {
         id: 'copy',
         group: 'Actions',
@@ -98,7 +78,7 @@ export default function CommandPalette() {
         id: `src-${p.id}`,
         group: 'Elsewhere',
         label: `${p.name} — source`,
-        hint: p.indexCategory.toLowerCase(),
+        hint: p.category.toLowerCase(),
         icon: 'arrowUpRight',
         run: () => open(p.source),
       })),

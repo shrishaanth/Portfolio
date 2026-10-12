@@ -5,59 +5,53 @@ navigation (no router), plain CSS with design tokens.
 
 ## Stack
 
-- Vite + React 18 + TypeScript — no UI or animation libraries; every interaction is
-  hand-rolled (IntersectionObserver, rAF, CSS transitions)
-- Plain global CSS split by area in `src/styles/` (`tokens.css` holds the palette, type
-  scale, radii and easing curves). Global rather than CSS Modules because a lot of the
-  styling keys off cross-component state classes (`.js-motion`, `.is-in`, `[data-cat]`, …)
-- Fonts: Inter Tight (display + body), JetBrains Mono (labels), Instrument Serif (pull quotes only)
+- Vite + React 18 + TypeScript — no UI or animation libraries
+- Plain global CSS in `src/styles/` (`tokens.css` holds the palette, type scale and easing)
+- Fonts: Geist (everything) and Geist Mono (labels)
 - ESLint + Prettier
 
 ## Design
 
-"Slate": cool near-black surfaces, off-white type, one calm blue accent (`--accent`), plus a
-muted hue per project and per skill category. Hierarchy runs giant name → numbered section
-heads (`01 — About`) → two-tone display titles (ink, then muted grey) → body copy.
+Black ground, off-white and warm-grey type, hairline borders and one soft pink accent used
+sparingly. Section headers are a mono label with a leading rule, then a two-tone display
+title (first line in ink, second in grey).
 
-Interactions, all of which respect `prefers-reduced-motion`:
+Each project card carries an animated canvas scene in its top-right corner, tied to what the
+project does (a reading order through an import graph, a blast radius, a card moving across
+a board, demand pulsing across zones), in pink and orange light, with pale dust drifting over
+the card. A scene can be swapped for a rendered image by setting `image` on the project — see
+[docs/imagery.md](docs/imagery.md).
 
-- **Hero** — a live node graph on `<canvas>` passing "messages" along its edges (a nod to
-  SurgeMap); it leans toward the cursor and pauses offscreen. Letter-by-letter name reveal,
-  portrait pill, rotating interests.
-- **Chrome** — floating nav with a sliding pill that tracks hover/active and hides on scroll
-  down; scroll progress bar; command palette on `⌘K` / `Ctrl+K` / `/`; toasts.
-- **About** — tilting greyscale portrait, a terminal that types its status, a statement whose
-  words light up as you scroll, spotlight focus cards, count-up stats.
-- **Work** — project cards pin and stack as you scroll (the covered card recedes); diagrams
-  draw in group by group with flowing edges; expandable back-story; the Syntropy
-  "peek at the future" easter egg.
-- **Résumé** — résumé card, a timeline whose spine draws on scroll, a filterable skill
-  matrix that shows which projects use each skill.
-- **Contact** — click-to-copy email, channel rows, a live-ish ping sparkline, and a
-  floating-label form that composes a `mailto:`.
+The Stack section is a layered diagram (frontend at the top, languages at the bottom, tools
+in a side rail). One project is traced through it at a time: the skills it uses light up and
+glowing links join them layer to layer. Which skills light up is derived from each project's
+`stack` in `projects.ts`, matched against `skills.ts`, so there is nothing to keep in sync by hand.
+
+## Content
+
+All copy lives in `src/data/`. The four featured projects — CodeAtlas, Axon, Taskify and
+SurgeMap — are in `projects.ts`; **every figure there comes from that project's README or
+evaluation docs**, so update both together.
 
 ## Structure
 
 ```
 index.html              Vite entry (head meta, fonts, #root, pre-paint js-motion flag)
-public/                 og.png, portrait.jpg, robots.txt — served as-is
+public/                 og.png, robots.txt, projects/ (optional renders) — served as-is
 src/
   main.tsx              mounts <App/>, imports styles
-  App.tsx               page order + global overlays (palette, toast)
-  context/AppContext    toast, command palette, résumé-opening, copy-email
-  data/                 all copy — profile.ts, projects.ts, skills.ts
-  hooks/                useInView, useScrollFrame, useActiveSection, useMagnetic,
-                        usePointerVars, useCountUp, useLocalTime
+  App.tsx               page order + overlays (command menu, toast)
+  context/AppContext    toast, command menu, résumé-opening, copy-email
+  data/                 profile.ts, projects.ts, skills.ts, nav.ts
+  hooks/                useInView, useScrollFrame, useActiveSection, useCountUp, useLocalTime,
+                        useCanvas
   lib/                  env.ts (matchMedia helpers), scroll.ts (scrollToId, copyText, clamp)
   components/
-    layout/             Nav, Footer, ScrollProgress, CommandPalette, Toast
-    ui/                 Reveal, SplitText, SectionHead, MagneticLink, Marquee, Icon
-    hero/               Hero, NetworkCanvas, Rotator
-    about/              About, PortraitCard, StatusTerminal, ScrollText, FocusCard, Stats
-    work/               Work (stacking deck), ProjectCard, diagrams/ (hand-authored SVG)
-    resume/             Resume, Timeline, SkillMatrix, ResumeViewer
-    contact/            Contact, ContactForm, Latency
-  styles/               tokens, base, layout, hero, about, work, resume, contact
+    layout/             Nav, Footer, CommandPalette, Toast, ResumeViewer
+    ui/                 Reveal, SectionHead, Icon
+    visuals/            scenes.ts (the canvas scenes), paint.ts, SceneCanvas, ProjectVisual
+    sections/           Hero, Work, Approach, About, Stack, Contact
+  styles/               tokens, base, layout, sections
 ```
 
 ## Commands

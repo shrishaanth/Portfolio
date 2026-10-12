@@ -1,17 +1,14 @@
-// Static content for the hero, about and contact sections.
+// Static content for the hero, approach, about and contact sections.
 // Edit here — no markup lives in this file.
 
 export const profile = {
   name: 'Shrishaanth U',
-  badge: 'OPEN — SUMMER 2026',
+  role: 'Backend, developer tools & applied ML',
+  availability: 'Open to internships',
   blurb:
-    'Third-year CS student at PSG College of Technology. I work on real-time ' +
-    'systems, applied ML and quantitative pipelines — usually by building ' +
-    'something end to end and then trying to break it.',
-  facts: [
-    { k: 'CGPA', v: '9.18', accent: true },
-    { k: 'LOC', v: 'COIMBATORE' },
-  ],
+    'Third-year CS student at PSG College of Technology. I work on backend systems, ' +
+    'developer tools and applied ML — usually by building something end to end and then ' +
+    'measuring whether it actually works.',
   socials: {
     github: { handle: '@shrishaanth', url: 'https://github.com/shrishaanth' },
     linkedin: { handle: 'shrishaanth-dev', url: 'https://www.linkedin.com/in/shrishaanth-dev' },
@@ -21,54 +18,67 @@ export const profile = {
   location: 'Coimbatore, India · remote-friendly',
 };
 
+// Count-up figures under the hero. Each is sourced from a project README or the transcript.
+export const stats: {
+  value: number;
+  decimals?: number;
+  suffix?: string;
+  label: string;
+}[] = [
+  { value: 9.18, decimals: 2, label: 'CGPA, out of 10' },
+  { value: 761, label: 'automated tests in Taskify' },
+  { value: 200, label: 'real API version pairs Axon was evaluated on' },
+  { value: 2.9, decimals: 1, suffix: 'M', label: 'taxi trips in SurgeMap’s January 2024 data' },
+];
+
+// "How I work" — three steps, each backed by something in the projects above.
+export const approach = [
+  {
+    title: 'Build',
+    sub: 'end to end',
+    body:
+      'From the data model to a deployed app. CodeAtlas, Axon and Taskify each ship an API, ' +
+      'a UI and a documented way to run them.',
+  },
+  {
+    title: 'Measure',
+    sub: 'against baselines',
+    body:
+      'A result only counts next to something simpler. SurgeMap is compared with four ' +
+      'baselines; CodeAtlas’s reading order with sorting by file size.',
+  },
+  {
+    title: 'Report',
+    sub: 'the losses too',
+    body:
+      'When a baseline ties or wins, that goes in the write-up. Axon’s README says plainly ' +
+      'where its diff falls short of an established tool.',
+  },
+];
+
 export const aboutProse = [
-  'I’m a third-year student in the integrated M.Sc. Software Systems ' +
-    'programme at PSG College of Technology, in Coimbatore. Most of what I know ' +
-    'I’ve picked up by building things end to end and then trying to break them.',
-  'I’m drawn to systems where correctness is hard to fake — a board ' +
-    'where tenant isolation is enforced by the database on every request, a demand ' +
-    'forecast that has to beat a linear baseline, a backtest that isn’t allowed ' +
-    'to see the future. The interesting part is usually the part that resists shortcuts.',
-  'Right now I’m looking for a summer 2026 internship in SDE, backend ' + 'systems, or applied ML.',
-];
-
-export const focusAreas = [
-  {
-    k: 'FULL-STACK',
-    v: 'TypeScript, React, Node. Auth, real-time sync, and data models that hold up under multi-tenancy.',
-  },
-  {
-    k: 'APPLIED ML',
-    v: 'PyTorch and the scientific-Python stack. Graph networks, sequence models, and evaluation that doesn’t cheat.',
-  },
-  {
-    k: 'SYSTEMS & QUANT',
-    v: 'C++ and Python for the performance-sensitive parts. Point-in-time data, walk-forward testing, no leakage.',
-  },
-];
-
-export const sysRows: { k: string; v: string; bold?: string; ok?: boolean }[] = [
-  { k: 'year', v: 'third of five · integrated M.Sc.' },
-  { k: 'uptime', v: '~3 yrs · ', bold: 'minor outages during exams' },
-  { k: 'open PRs', v: '3 · all mine' },
-  { k: 'availability', v: 'summer 2026 · SDE / backend / applied ML', ok: true },
-  { k: 'location', v: 'Coimbatore, India · remote-friendly' },
-  { k: 'coffee→code', v: 'conversion nominal' },
+  'I’m a third-year student in the integrated M.Sc. Software Systems programme at PSG ' +
+    'College of Technology, in Coimbatore. Most of what I know I’ve picked up by building ' +
+    'things end to end and then trying to break them.',
+  'I’m drawn to problems where correctness is hard to fake: tenant isolation the database ' +
+    'enforces on every request, a forecast that has to beat its baselines, an analysis ' +
+    'whose every number traces back to a file, line or commit.',
+  'Right now I’m looking for an internship in SDE, backend systems, or applied ML.',
 ];
 
 export const education = [
   {
-    org: 'PSG COLLEGE OF TECHNOLOGY',
+    org: 'PSG College of Technology',
     detail: 'M.Sc. Software Systems (Integrated) · CGPA 9.18 / 10',
-    when: 'PRESENT',
+    when: 'Present',
   },
   {
-    org: 'S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE',
+    org: 'S.B.O.A Matric. Hr. Sec. School, Coimbatore',
     detail: 'Class XII — Higher Secondary (State Board) · 95.6%',
     when: '2024',
   },
   {
-    org: 'S.B.O.A MATRIC. HR. SEC. SCHOOL, COIMBATORE',
+    org: 'S.B.O.A Matric. Hr. Sec. School, Coimbatore',
     detail: 'Class X — SSLC (State Board) · 92.6%',
     when: '2022',
   },
@@ -80,32 +90,3 @@ export const education = [
 export const RESUME_ID = '1Gpt30T3k-4t7LPenap52BrzmcGAnOGeZ';
 export const RESUME_HREF = `https://drive.google.com/file/d/${RESUME_ID}/view`;
 export const RESUME_EMBED = `https://drive.google.com/file/d/${RESUME_ID}/preview`;
-
-// Cycled through in the hero, one at a time.
-export const interests = [
-  'real-time systems',
-  'graph neural networks',
-  'walk-forward backtests',
-  'multi-tenant backends',
-];
-
-// Count-up figures in the about section.
-export const stats: {
-  value: number;
-  decimals?: number;
-  prefix?: string;
-  suffix?: string;
-  label: string;
-}[] = [
-  { value: 9.18, decimals: 2, label: 'CGPA, out of 10' },
-  { value: 253, label: 'NYC zones in one graph' },
-  { value: 10, prefix: '≤', suffix: '%', label: 'RMSE cut vs. ridge' },
-  { value: 0, label: 'bytes of future data leaked' },
-];
-
-// The scroll-lit statement in the about section. *Starred* words get the accent.
-export const statement =
-  'I’m drawn to systems where *correctness* is *hard* *to* *fake* — tenant isolation the ' +
-  'database enforces on every request, a forecast that has to beat its baseline, a backtest ' +
-  'that isn’t allowed to see the future. The interesting part is usually the part that ' +
-  '*resists* *shortcuts.*';

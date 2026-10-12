@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
-import About from './components/about/About';
-import Contact from './components/contact/Contact';
-import Hero from './components/hero/Hero';
 import CommandPalette from './components/layout/CommandPalette';
 import Footer from './components/layout/Footer';
 import Nav from './components/layout/Nav';
-import ScrollProgress from './components/layout/ScrollProgress';
 import Toast from './components/layout/Toast';
-import Resume from './components/resume/Resume';
-import Marquee from './components/ui/Marquee';
-import Work from './components/work/Work';
+import About from './components/sections/About';
+import Approach from './components/sections/Approach';
+import Contact from './components/sections/Contact';
+import Hero from './components/sections/Hero';
+import Stack from './components/sections/Stack';
+import Work from './components/sections/Work';
 import { AppProvider } from './context/AppContext';
 
 export default function App() {
@@ -23,18 +22,17 @@ export default function App() {
 
   return (
     <AppProvider>
-      <a className="skip" href="#about">
+      <a className="skip" href="#work">
         Skip to content
       </a>
-      <ScrollProgress />
       <Nav />
 
       <main>
         <Hero />
-        <Marquee />
-        <About />
         <Work />
-        <Resume />
+        <Approach />
+        <About />
+        <Stack />
         <Contact />
       </main>
       <Footer />

@@ -4,11 +4,7 @@ import App from './App';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/layout.css';
-import './styles/hero.css';
-import './styles/about.css';
-import './styles/work.css';
-import './styles/resume.css';
-import './styles/contact.css';
+import './styles/sections.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

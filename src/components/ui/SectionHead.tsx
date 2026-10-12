@@ -1,29 +1,37 @@
 import type { ReactNode } from 'react';
 import Reveal from './Reveal';
 
-/** Numbered section header: "01 ——— ABOUT" over a large display title. */
+/**
+ * Section header: a mono label with a leading rule, then a two-tone display
+ * title (first line in ink, second in grey) and an optional aside paragraph.
+ */
 export default function SectionHead({
-  index,
   label,
-  title,
+  lead,
+  tail,
   aside,
 }: {
-  index: string;
-  label: string;
-  title: ReactNode;
-  aside?: ReactNode;
+  label: ReactNode;
+  lead: string;
+  tail: string;
+  aside?: string;
 }) {
   return (
     <header className="shead">
-      <Reveal className="shead__meta" variant="fade">
-        <span className="shead__idx">{index}</span>
-        <span className="shead__rule" />
-        <span className="shead__label">{label}</span>
-        {aside && <span className="shead__aside">{aside}</span>}
+      <Reveal className="label" variant="fade">
+        <span className="label__rule" aria-hidden="true" />
+        {label}
       </Reveal>
-      <Reveal as="h2" className="shead__title" delay={90} variant="clip">
-        {title}
-      </Reveal>
+      <div className="shead__row">
+        <Reveal as="h2" className="display" variant="clip" delay={60}>
+          {lead} <span className="display__dim">{tail}</span>
+        </Reveal>
+        {aside && (
+          <Reveal as="p" className="shead__aside" delay={140}>
+            {aside}
+          </Reveal>
+        )}
+      </div>
     </header>
   );
 }

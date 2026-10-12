@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # résumé is hosted off-repo — never commit it here
 Shrishaanth-U-Resume.pdf
+
+# full-size render originals — large, and not used by the site
+design/renders/*.png
